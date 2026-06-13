@@ -1,0 +1,199 @@
+{
+  "@@locale": "tr",
+  "appName": "Wakeon",
+  "deviceName": "Cihaz adı",
+  "deviceNameHint": "Masaüstü PC",
+  "macAddress": "MAC adresi",
+  "macAddressHint": "AA:BB:CC:DD:EE:FF",
+  "broadcastAddress": "Broadcast adresi",
+  "broadcastAddressHint": "192.168.1.255",
+  "port": "Port",
+  "portHint": "9",
+  "requiredFieldError": "Bu alan zorunludur.",
+  "broadcastAddressRequired": "Broadcast adresi zorunludur.",
+  "invalidIpv4Address": "Geçerli bir IPv4 adresi girin.",
+  "macAddressRequired": "MAC adresi zorunludur.",
+  "invalidMacAddress": "Geçerli bir MAC adresi girin.",
+  "invalidPort": "Geçerli bir port girin.",
+  "portRangeError": "Port 1 ile 65535 arasında olmalıdır.",
+  "updateDeviceProfileDescription": "Bu Wake-on-LAN cihaz profilini güncelle.",
+  "addDeviceProfileDescription": "Bu cihazdan uyandırmak istediğin bilgisayarı ekle.",
+  "howToFindMacAddress": "MAC adresini nasıl bulursun?",
+  "windowsCommandPromptInstruction": "Windows’ta Komut İstemi’ni aç ve şunu çalıştır:",
+  "usePhysicalAddressInstruction": "Ethernet bağdaştırıcının Fiziksel Adres değerini kullan.",
+  "edit": "Düzenle",
+  "wakePacketSent": "{deviceName} cihazına uyandırma paketi gönderildi.",
+  "couldNotWakeDevice": "{deviceName} uyandırılamadı: {error}",
+  "deleteDeviceQuestion": "Cihaz silinsin mi?",
+  "deviceWillBeRemoved": "{deviceName} Wakeon'dan kaldırılacak.",
+  "deviceDeleted": "{deviceName} silindi.",
+  "neverWoken": "Hiç uyandırılmadı",
+  "lastWake": "Son uyandırma: {date}",
+  "deviceNetworkAddress": "{address} · Port {port}",
+  "deviceWithIp": "Cihaz {ip}",
+  "unknownDevice": "Bilinmeyen cihaz",
+  "scanningLocalNetwork": "Yerel ağ taranıyor...",
+  "scanMayTakeSeconds": "Bu işlem birkaç saniye sürebilir.",
+  "noDevicesFound": "Cihaz bulunamadı",
+  "noDevicesFoundDescription": "Bazı cihazlar keşfi engelleyebilir. Bilgisayarını yine de manuel olarak ekleyebilirsin.",
+  "scanAgain": "Tekrar tara",
+  "scanFailed": "Tarama başarısız oldu",
+  "tryAgain": "Tekrar dene",
+  "localNetwork": "Yerel ağ",
+  "recommended": "Önerilen",
+  "localNetworkDescription": "Wakeon, telefonun ve bilgisayarın aynı yerel ağa bağlı olduğunda en iyi şekilde çalışır.",
+  "vpnMode": "VPN modu",
+  "bestForRemoteWake": "Uzaktan uyandırma için en iyisi",
+  "vpnModeDescription": "Ev ağına geri bağlanmak için WireGuard, Tailscale, ZeroTier veya yönlendiricinin VPN özelliğini kullan. Ardından Wakeon'u normal şekilde kullan.",
+  "routerWakeMode": "Yönlendirici uyandırma modu",
+  "routerDependent": "Yönlendiriciye bağlı",
+  "routerWakeModeDescription": "Bazı yönlendiriciler yerleşik Wake-on-LAN özelliği sunar. Yönlendiricin destekliyorsa bilgisayarını yönetim panelinden uyandırabilirsin.",
+  "advancedWanMode": "Gelişmiş WAN modu",
+  "notRecommended": "Önerilmez",
+  "advancedWanModeDescription": "Genel IP, port yönlendirme, statik DHCP kiralaması ve IP-MAC eşleştirmesi gerekebilir. Bu yöntem büyük ölçüde yönlendiricine ve internet sağlayıcına bağlıdır.",
+  "wakeFromAnotherNetwork": "Başka bir ağdan uyandır",
+  "remoteWakeIntroDescription": "Wake-on-LAN yerel ağlar için tasarlanmıştır. Uzaktan uyandırma mümkündür ancak en güvenli ve en güvenilir yöntem ev ağına VPN ile bağlanmaktır.",
+  "remoteWakeSecurityWarning": "Bilgisayarını doğrudan internete açmaktan kaçın. Mümkün olduğunda VPN tabanlı erişimi tercih et.",
+  "remoteWakeGuideDescription": "Cihazları başka bir ağdan nasıl uyandırabileceğini öğren.",
+  "appTagline": "AlpWare Studio tarafından geliştirilen basit Wake-on-LAN uygulaması",
+  "noAds": "Reklam yok",
+  "noAdsDescription": "Wakeon reklam içermez.",
+  "noAccount": "Hesap yok",
+  "noAccountDescription": "Oturum açma veya bulut hesabı gerekmez.",
+  "localOnly": "Tamamen yerel",
+  "localOnlyDescription": "Kaydedilen cihazlar yalnızca cihazında saklanır.",
+  "openSource": "Açık kaynak",
+  "openSourceDescription": "Basit, şeffaf ve topluluk dostu olacak şekilde geliştirilmiştir.",
+  "github": "GitHub",
+  "addDevice": "Cihaz ekle",
+  "editDevice": "Cihazı düzenle",
+  "saveDevice": "Cihazı kaydet",
+  "saveChanges": "Değişiklikleri kaydet",
+  "wake": "Uyandır",
+  "delete": "Sil",
+  "cancel": "İptal",
+  "scanNetwork": "Ağı tara",
+  "settings": "Ayarlar",
+  "remoteWakeGuide": "Uzaktan uyandırma rehberi",
+  "noDevicesYet": "Henüz cihaz yok",
+  "noDevicesDescription": "İlk bilgisayarını ekle ve tek dokunuşla uyandır.",
+  "deviceType": "Cihaz türü",
+  "deviceTypeDesktop": "Masaüstü",
+  "deviceTypeLaptop": "Dizüstü",
+  "deviceTypeServer": "Sunucu",
+  "deviceTypeNas": "NAS",
+  "deviceTypeRouter": "Yönlendirici",
+  "deviceTypeOther": "Diğer",
+  "testSetup": "Kurulumu test et",
+  "deviceConfigurationLooksGood": "{deviceName} yapılandırması iyi görünüyor.",
+  "@deviceConfigurationLooksGood": {
+    "placeholders": {
+      "deviceName": {}
+    }
+  },
+  "deviceConfigurationFailed": "{deviceName} yapılandırması başarısız oldu: {error}",
+  "@deviceConfigurationFailed": {
+    "placeholders": {
+      "deviceName": {},
+      "error": {}
+    }
+  },
+  "exportBackup": "Yedeği dışa aktar",
+  "exportBackupDescription": "Cihazlarınızı JSON yedek dosyası olarak kaydedin.",
+  "importBackup": "Yedeği içe aktar",
+  "importBackupDescription": "Wakeon JSON yedek dosyasından cihazları geri yükleyin.",
+  "backupExported": "Yedek dışa aktarıldı.",
+  "couldNotExportBackup": "Yedek dışa aktarılamadı: {error}",
+  "@couldNotExportBackup": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "importCancelled": "İçe aktarma iptal edildi.",
+  "devicesImported": "{count} cihaz içe aktarıldı.",
+  "@devicesImported": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "couldNotImportBackup": "Yedek içe aktarılamadı: {error}",
+  "@couldNotImportBackup": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "exportCancelled": "Dışa aktarma iptal edildi.",
+  "noDevicesToExport": "Dışa aktarılacak cihaz yok.",
+  "favorites": "Favoriler",
+  "addToFavorites": "Favorilere ekle",
+  "removeFromFavorites": "Favorilerden çıkar",
+  "searchDevices": "Cihazlarda ara",
+  "noSearchResults": "Sonuç bulunamadı",
+  "noSearchResultsDescription": "“{query}” ile eşleşen cihaz bulunamadı.",
+  "@noSearchResultsDescription": {
+    "placeholders": {
+      "query": {}
+    }
+  },
+  "invalidBroadcastAddress": "Invalid broadcast address.",
+  "invalidPort": "Invalid port.",
+  "udpSocketFailed": "Could not open UDP socket.",
+  "devicesFound": "{count} cihaz bulundu",
+  "@devicesFound": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sortDevices": "Cihazları sırala",
+  "sortFavoritesFirst": "Favoriler önce",
+  "sortNameAsc": "İsim (A-Z)",
+  "sortNameDesc": "İsim (Z-A)",
+  "sortRecentlyAdded": "Son eklenenler",
+  "sortRecentlyWoken": "Son uyandırılanlar",
+  "sortDeviceType": "Cihaz türü",
+  "sortedBy": "Sıralama: {sortType}",
+  "@sortedBy": {
+    "placeholders": {
+      "sortType": {}
+    }
+  },
+  "macAddressRequiredManually": "MAC adresi manuel girilmelidir.",
+  "scanComplete": "Tarama tamamlandı",
+  "addManually": "Manuel ekle",
+  "general": "Genel",
+  "dataBackup": "Veri ve yedekleme",
+  "trustPrivacy": "Güven ve gizlilik",
+  "projectLinks": "Proje bağlantıları",
+  "privacySummaryTitle": "Gizlilik odaklı tasarım",
+  "privacySummaryDescription": "Wakeon cihaz yapılandırmalarınızı cihazınızda tutar; hesap, reklam, analiz ve takip sistemleri kullanmaz.",
+  "savedLocally": "Yerel olarak saklanır",
+  "savedLocallyDescription": "Cihaz profilleri yalnızca bu cihazda saklanır.",
+  "noTracking": "Takip yok",
+  "noTrackingDescription": "Wakeon analiz veya reklam SDK'ları içermez.",
+  "backupControl": "Yedekler sizin kontrolünüzde",
+  "backupControlDescription": "Yedek dosyaları yalnızca siz dışa aktarmayı seçtiğinizde oluşturulur.",
+  "openSourceProject": "Açık kaynak proje",
+  "openSourceProjectDescription": "Kaynak kodu görüntüleyin, hata bildirin veya GitHub üzerinden katkı sağlayın.",
+  "aboutWakeon": "Wakeon hakkında",
+  "versionLabel": "Sürüm {version}",
+  "@versionLabel": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "appVersion": "Uygulama sürümü",
+  "privacyPolicy": "Gizlilik Politikası",
+  "privacyPolicyDescription": "Wakeon kişisel veri toplamaz ve cihaz profillerini yerel olarak saklar.",
+  "openSourceLicenses": "Açık kaynak lisansları",
+  "openSourceLicensesDescription": "Wakeon tarafından kullanılan Flutter ve üçüncü taraf paket lisanslarını görüntüleyin.",
+  "studioDescription": "Sadelik, gizlilik ve gerçek kullanıcı değeri odağında bağımsız uygulamalar ve araçlar.",
+  "brandNoAds": "Reklam yok",
+  "brandPrivacyFirst": "Gizlilik odaklı",
+  "brandOpenSource": "Açık kaynak",
+  "macHelpWindowsTitle": "Windows",
+  "macHelpWindowsCommand": "ipconfig /all",
+  "macHelpMacosTitle": "macOS",
+  "macHelpMacosCommand": "ifconfig",
+  "macHelpLinuxTitle": "Linux",
+  "macHelpLinuxCommand": "ip link"
+}

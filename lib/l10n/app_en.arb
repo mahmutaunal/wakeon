@@ -1,0 +1,199 @@
+{
+  "@@locale": "en",
+  "appName": "Wakeon",
+  "deviceName": "Device name",
+  "deviceNameHint": "Desktop PC",
+  "macAddress": "MAC address",
+  "macAddressHint": "AA:BB:CC:DD:EE:FF",
+  "broadcastAddress": "Broadcast address",
+  "broadcastAddressHint": "192.168.1.255",
+  "port": "Port",
+  "portHint": "9",
+  "requiredFieldError": "This field is required.",
+  "broadcastAddressRequired": "Broadcast address is required.",
+  "invalidIpv4Address": "Enter a valid IPv4 address.",
+  "macAddressRequired": "MAC address is required.",
+  "invalidMacAddress": "Enter a valid MAC address.",
+  "invalidPort": "Enter a valid port.",
+  "portRangeError": "Port must be between 1 and 65535.",
+  "updateDeviceProfileDescription": "Update this Wake-on-LAN device profile.",
+  "addDeviceProfileDescription": "Add a computer you want to wake from this device.",
+  "howToFindMacAddress": "How to find your MAC address",
+  "windowsCommandPromptInstruction": "Find the MAC address of the device you want to wake. On Windows, open Command Prompt and run:",
+  "usePhysicalAddressInstruction": "Use the MAC address (Physical Address) of your Ethernet adapter. On macOS use 'ifconfig', and on Linux use 'ip link' to find it.",
+  "edit": "Edit",
+  "wakePacketSent": "Wake packet sent to {deviceName}.",
+  "couldNotWakeDevice": "Could not wake {deviceName}: {error}",
+  "deleteDeviceQuestion": "Delete device?",
+  "deviceWillBeRemoved": "{deviceName} will be removed from Wakeon.",
+  "deviceDeleted": "{deviceName} deleted.",
+  "neverWoken": "Never woken",
+  "lastWake": "Last wake: {date}",
+  "deviceNetworkAddress": "{address} · Port {port}",
+  "deviceWithIp": "Device {ip}",
+  "unknownDevice": "Unknown device",
+  "scanningLocalNetwork": "Scanning your local network...",
+  "scanMayTakeSeconds": "This may take a few seconds.",
+  "noDevicesFound": "No devices found",
+  "noDevicesFoundDescription": "Some devices may block discovery. You can still add your computer manually.",
+  "scanAgain": "Scan again",
+  "scanFailed": "Scan failed",
+  "tryAgain": "Try again",
+  "localNetwork": "Local network",
+  "recommended": "Recommended",
+  "localNetworkDescription": "Wakeon works best when your phone and computer are connected to the same local network.",
+  "vpnMode": "VPN mode",
+  "bestForRemoteWake": "Best for remote wake",
+  "vpnModeDescription": "Use WireGuard, Tailscale, ZeroTier, or your router VPN to connect back to your home network. Then use Wakeon normally.",
+  "routerWakeMode": "Router wake mode",
+  "routerDependent": "Router dependent",
+  "routerWakeModeDescription": "Some routers include a built-in Wake-on-LAN feature. If your router supports it, you can wake your computer from the router panel.",
+  "advancedWanMode": "Advanced WAN mode",
+  "notRecommended": "Not recommended",
+  "advancedWanModeDescription": "Public IP, port forwarding, static DHCP lease, and IP-MAC binding may be required. This depends heavily on your router and ISP.",
+  "wakeFromAnotherNetwork": "Wake from another network",
+  "remoteWakeIntroDescription": "Wake-on-LAN was designed for local networks. Remote wake is possible, but the safest and most reliable method is using a VPN into your home network.",
+  "remoteWakeSecurityWarning": "Avoid exposing your computer directly to the internet. Prefer VPN-based access whenever possible.",
+  "remoteWakeGuideDescription": "Learn how to wake devices from another network.",
+  "appTagline": "Simple Wake-on-LAN by AlpWare Studio",
+  "noAds": "No ads",
+  "noAdsDescription": "Wakeon does not contain ads.",
+  "noAccount": "No account",
+  "noAccountDescription": "No sign in or cloud account is required.",
+  "localOnly": "Local only",
+  "localOnlyDescription": "Saved devices stay on your device.",
+  "openSource": "Open source",
+  "openSourceDescription": "Built to be simple, transparent, and community-friendly.",
+  "github": "GitHub",
+  "addDevice": "Add device",
+  "editDevice": "Edit device",
+  "saveDevice": "Save device",
+  "saveChanges": "Save changes",
+  "wake": "Wake",
+  "delete": "Delete",
+  "cancel": "Cancel",
+  "scanNetwork": "Scan network",
+  "settings": "Settings",
+  "remoteWakeGuide": "Remote wake guide",
+  "noDevicesYet": "No devices yet",
+  "noDevicesDescription": "Add your first computer and wake it with one tap.",
+  "deviceType": "Device type",
+  "deviceTypeDesktop": "Desktop",
+  "deviceTypeLaptop": "Laptop",
+  "deviceTypeServer": "Server",
+  "deviceTypeNas": "NAS",
+  "deviceTypeRouter": "Router",
+  "deviceTypeOther": "Other",
+  "testSetup": "Test setup",
+  "deviceConfigurationLooksGood": "{deviceName} configuration looks good.",
+  "@deviceConfigurationLooksGood": {
+    "placeholders": {
+      "deviceName": {}
+    }
+  },
+  "deviceConfigurationFailed": "{deviceName} configuration failed: {error}",
+  "@deviceConfigurationFailed": {
+    "placeholders": {
+      "deviceName": {},
+      "error": {}
+    }
+  },
+  "exportBackup": "Export backup",
+  "exportBackupDescription": "Save your devices as a JSON backup file.",
+  "importBackup": "Import backup",
+  "importBackupDescription": "Restore devices from a Wakeon JSON backup file.",
+  "backupExported": "Backup exported.",
+  "couldNotExportBackup": "Could not export backup: {error}",
+  "@couldNotExportBackup": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "importCancelled": "Import cancelled.",
+  "devicesImported": "{count} devices imported.",
+  "@devicesImported": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "couldNotImportBackup": "Could not import backup: {error}",
+  "@couldNotImportBackup": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "exportCancelled": "Export cancelled.",
+  "noDevicesToExport": "There are no devices to export.",
+  "favorites": "Favorites",
+  "addToFavorites": "Add to favorites",
+  "removeFromFavorites": "Remove from favorites",
+  "searchDevices": "Search devices",
+  "noSearchResults": "No results found",
+  "noSearchResultsDescription": "No devices match “{query}”.",
+  "@noSearchResultsDescription": {
+    "placeholders": {
+      "query": {}
+    }
+  },
+  "invalidBroadcastAddress": "Invalid broadcast address.",
+  "invalidPort": "Invalid port.",
+  "udpSocketFailed": "Could not open UDP socket.",
+  "devicesFound": "{count} devices found",
+  "@devicesFound": {
+    "placeholders": {
+      "count": {}
+    }
+  },
+  "sortDevices": "Sort devices",
+  "sortFavoritesFirst": "Favorites first",
+  "sortNameAsc": "Name (A-Z)",
+  "sortNameDesc": "Name (Z-A)",
+  "sortRecentlyAdded": "Recently added",
+  "sortRecentlyWoken": "Recently woken",
+  "sortDeviceType": "Device type",
+  "sortedBy": "Sorted by: {sortType}",
+  "@sortedBy": {
+    "placeholders": {
+      "sortType": {}
+    }
+  },
+  "macAddressRequiredManually": "MAC address must be entered manually.",
+  "scanComplete": "Scan complete",
+  "addManually": "Add manually",
+  "general": "General",
+  "dataBackup": "Data & backup",
+  "trustPrivacy": "Trust & privacy",
+  "projectLinks": "Project links",
+  "privacySummaryTitle": "Privacy-first by design",
+  "privacySummaryDescription": "Wakeon keeps your device configuration on your device and avoids accounts, ads, analytics, and tracking.",
+  "savedLocally": "Saved locally",
+  "savedLocallyDescription": "Device profiles are stored only on this device.",
+  "noTracking": "No tracking",
+  "noTrackingDescription": "Wakeon does not include analytics or advertising SDKs.",
+  "backupControl": "You control backups",
+  "backupControlDescription": "Backup files are created only when you choose to export them.",
+  "openSourceProject": "Open-source project",
+  "openSourceProjectDescription": "View the source code, report issues, or contribute on GitHub.",
+  "aboutWakeon": "About Wakeon",
+  "versionLabel": "Version {version}",
+  "@versionLabel": {
+    "placeholders": {
+      "version": {}
+    }
+  },
+  "appVersion": "App version",
+  "privacyPolicy": "Privacy Policy",
+  "privacyPolicyDescription": "Wakeon does not collect personal data and keeps device profiles local.",
+  "openSourceLicenses": "Open-source licenses",
+  "openSourceLicensesDescription": "View licenses for Flutter and third-party packages used by Wakeon.",
+  "studioDescription": "Independent apps and tools focused on simplicity, privacy, and real user value.",
+  "brandNoAds": "No ads",
+  "brandPrivacyFirst": "Privacy-first",
+  "brandOpenSource": "Open source",
+  "macHelpWindowsTitle": "Windows",
+  "macHelpWindowsCommand": "ipconfig /all",
+  "macHelpMacosTitle": "macOS",
+  "macHelpMacosCommand": "ifconfig",
+  "macHelpLinuxTitle": "Linux",
+  "macHelpLinuxCommand": "ip link"
+}
