@@ -203,7 +203,7 @@ abstract class AppLocalizations {
   /// No description provided for @addDeviceProfileDescription.
   ///
   /// In en, this message translates to:
-  /// **'Add a computer you want to wake from this device.'**
+  /// **'Add a device you want to wake from this device.'**
   String get addDeviceProfileDescription;
 
   /// No description provided for @howToFindMacAddress.
@@ -215,7 +215,7 @@ abstract class AppLocalizations {
   /// No description provided for @windowsCommandPromptInstruction.
   ///
   /// In en, this message translates to:
-  /// **'Find the MAC address of the device you want to wake. On Windows, open Command Prompt and run:'**
+  /// **'Find the MAC address of the device you want to wake. Open Command Prompt and run:'**
   String get windowsCommandPromptInstruction;
 
   /// No description provided for @usePhysicalAddressInstruction.
@@ -991,6 +991,90 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'ip link'**
   String get macHelpLinuxCommand;
+
+  /// No description provided for @hostnameDetected.
+  ///
+  /// In en, this message translates to:
+  /// **'Hostname detected'**
+  String get hostnameDetected;
+
+  /// No description provided for @hostnameNotAvailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Hostname not available'**
+  String get hostnameNotAvailable;
+
+  /// No description provided for @hostAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Host address'**
+  String get hostAddress;
+
+  /// No description provided for @hostAddressHint.
+  ///
+  /// In en, this message translates to:
+  /// **'192.168.1.42'**
+  String get hostAddressHint;
+
+  /// No description provided for @online.
+  ///
+  /// In en, this message translates to:
+  /// **'Online'**
+  String get online;
+
+  /// No description provided for @offline.
+  ///
+  /// In en, this message translates to:
+  /// **'Offline'**
+  String get offline;
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
+
+  /// No description provided for @lastSeenNever.
+  ///
+  /// In en, this message translates to:
+  /// **'Last seen: never'**
+  String get lastSeenNever;
+
+  /// No description provided for @lastSeenAt.
+  ///
+  /// In en, this message translates to:
+  /// **'Last seen: {date}'**
+  String lastSeenAt(Object date);
+
+  /// No description provided for @insertDot.
+  ///
+  /// In en, this message translates to:
+  /// **'Insert dot'**
+  String get insertDot;
+
+  /// No description provided for @networkAddressHelpTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Network address help'**
+  String get networkAddressHelpTitle;
+
+  /// No description provided for @hostAddressHelpDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The device IP address used to check online/offline status. It can be filled automatically from network scan results.'**
+  String get hostAddressHelpDescription;
+
+  /// No description provided for @broadcastAddressHelpDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The Wake-on-LAN broadcast address used to send the magic packet. It usually ends with .255.'**
+  String get broadcastAddressHelpDescription;
+
+  /// No description provided for @networkScanAutoFillDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'If you add a device from Network Scan, Wakeon fills the host and broadcast addresses automatically when possible.'**
+  String get networkScanAutoFillDescription;
 }
 
 class _AppLocalizationsDelegate

@@ -17,9 +17,9 @@
   "invalidPort": "Enter a valid port.",
   "portRangeError": "Port must be between 1 and 65535.",
   "updateDeviceProfileDescription": "Update this Wake-on-LAN device profile.",
-  "addDeviceProfileDescription": "Add a computer you want to wake from this device.",
+  "addDeviceProfileDescription": "Add a device you want to wake from this device.",
   "howToFindMacAddress": "How to find your MAC address",
-  "windowsCommandPromptInstruction": "Find the MAC address of the device you want to wake. On Windows, open Command Prompt and run:",
+  "windowsCommandPromptInstruction": "Find the MAC address of the device you want to wake. Open Command Prompt and run:",
   "usePhysicalAddressInstruction": "Use the MAC address (Physical Address) of your Ethernet adapter. On macOS use 'ifconfig', and on Linux use 'ip link' to find it.",
   "edit": "Edit",
   "wakePacketSent": "Wake packet sent to {deviceName}.",
@@ -195,5 +195,24 @@
   "macHelpMacosTitle": "macOS",
   "macHelpMacosCommand": "ifconfig",
   "macHelpLinuxTitle": "Linux",
-  "macHelpLinuxCommand": "ip link"
+  "macHelpLinuxCommand": "ip link",
+  "hostnameDetected": "Hostname detected",
+  "hostnameNotAvailable": "Hostname not available",
+  "hostAddress": "Host address",
+  "hostAddressHint": "192.168.1.42",
+  "online": "Online",
+  "offline": "Offline",
+  "unknown": "Unknown",
+  "lastSeenNever": "Last seen: never",
+  "lastSeenAt": "Last seen: {date}",
+  "@lastSeenAt": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "insertDot": "Insert dot",
+  "networkAddressHelpTitle": "Network address help",
+  "hostAddressHelpDescription": "The device IP address used to check online/offline status. It can be filled automatically from network scan results.",
+  "broadcastAddressHelpDescription": "The Wake-on-LAN broadcast address used to send the magic packet. It usually ends with .255.",
+  "networkScanAutoFillDescription": "If you add a device from Network Scan, Wakeon fills the host and broadcast addresses automatically when possible."
 }

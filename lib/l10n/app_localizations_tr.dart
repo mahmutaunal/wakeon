@@ -62,14 +62,14 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get addDeviceProfileDescription =>
-      'Bu cihazdan uyandırmak istediğin bilgisayarı ekle.';
+      'Bu cihazdan uyandırmak istediğin cihazu ekle.';
 
   @override
   String get howToFindMacAddress => 'MAC adresini nasıl bulursun?';
 
   @override
   String get windowsCommandPromptInstruction =>
-      'Windows’ta Komut İstemi’ni aç ve şunu çalıştır:';
+      'Uyandırmak istediğiniz cihazın MAC adresini bulun. Komut İstemi’ni aç ve şunu çalıştır:';
 
   @override
   String get usePhysicalAddressInstruction =>
@@ -512,4 +512,51 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get macHelpLinuxCommand => 'ip link';
+
+  @override
+  String get hostnameDetected => 'Cihaz adı algılandı';
+
+  @override
+  String get hostnameNotAvailable => 'Cihaz adı bulunamadı';
+
+  @override
+  String get hostAddress => 'Host adresi';
+
+  @override
+  String get hostAddressHint => '192.168.1.42';
+
+  @override
+  String get online => 'Çevrimiçi';
+
+  @override
+  String get offline => 'Çevrimdışı';
+
+  @override
+  String get unknown => 'Bilinmiyor';
+
+  @override
+  String get lastSeenNever => 'Son görülme: hiç';
+
+  @override
+  String lastSeenAt(Object date) {
+    return 'Son görülme: $date';
+  }
+
+  @override
+  String get insertDot => 'Nokta ekle';
+
+  @override
+  String get networkAddressHelpTitle => 'Ağ adresi yardımı';
+
+  @override
+  String get hostAddressHelpDescription =>
+      'Çevrimiçi/çevrimdışı durumunu kontrol etmek için kullanılan cihaz IP adresidir. Ağ taraması sonucundan otomatik doldurulabilir.';
+
+  @override
+  String get broadcastAddressHelpDescription =>
+      'Magic packet göndermek için kullanılan Wake-on-LAN broadcast adresidir. Genellikle .255 ile biter.';
+
+  @override
+  String get networkScanAutoFillDescription =>
+      'Cihazı Ağ Taraması üzerinden eklerseniz Wakeon mümkün olduğunda host ve broadcast adreslerini otomatik doldurur.';
 }

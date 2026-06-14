@@ -8,6 +8,8 @@ import '../data/wake_device_repository.dart';
 import '../data/wake_device_storage.dart';
 import '../domain/device_sort_type.dart';
 import '../domain/wake_device.dart';
+import '../data/device_status_service.dart';
+import '../domain/device_connection_status.dart';
 import 'devices_ui_state.dart';
 
 /// Provides local storage access for Wake-on-LAN devices.
@@ -43,6 +45,10 @@ final devicesControllerProvider =
     AsyncNotifierProvider<DevicesController, DevicesUiState>(
       DevicesController.new,
     );
+
+final deviceStatusServiceProvider = Provider<DeviceStatusService>(
+  (ref) => const DeviceStatusService(),
+);
 
 /// Manages device list state, persistence, sorting, backup, and wake actions.
 class DevicesController extends AsyncNotifier<DevicesUiState> {
@@ -200,6 +206,38 @@ class DevicesController extends AsyncNotifier<DevicesUiState> {
     );
 
     await _repository.saveDevices(sortedDevices);
+  }
+
+  Future<void> refreshDeviceStatuses() async {
+    final currentState = _currentState;
+    final statusService = ref.read(deviceStatusServiceProvider);
+
+    final updatedDevices = <WakeDevice>[];
+
+    for (final device in currentState.devices) {
+      final hostAddress = device.hostAddress?.trim();
+
+      if (hostAddress == null || hostAddress.isEmpty) {
+        updatedDevices.add(
+          device.copyWith(connectionStatus: DeviceConnectionStatus.unknown),
+        );
+
+        continue;
+      }
+
+      final isOnline = await statusService.isOnline(device);
+
+      updatedDevices.add(
+        device.copyWith(
+          connectionStatus: isOnline
+              ? DeviceConnectionStatus.online
+              : DeviceConnectionStatus.offline,
+          lastSeenAt: isOnline ? DateTime.now() : device.lastSeenAt,
+        ),
+      );
+    }
+
+    await _setDevices(updatedDevices, currentState.sortType);
   }
 
   // Applies the selected sort option while keeping deterministic name fallbacks.

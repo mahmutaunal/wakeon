@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import '../domain/wake_device_type.dart';
 import '../domain/wake_device.dart';
 import '../domain/device_sort_type.dart';
+import '../domain/device_connection_status.dart';
 import 'devices_controller.dart';
 import 'device_form_screen.dart';
 import 'network_scan_screen.dart';
@@ -63,6 +64,15 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
     }
 
     return error.toString();
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    Future.microtask(() {
+      ref.read(devicesControllerProvider.notifier).refreshDeviceStatuses();
+    });
   }
 
   @override
@@ -129,97 +139,107 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
             final sortType = state.sortType;
 
             if (devices.isEmpty) {
-              return const _EmptyDevicesView();
+              return RefreshIndicator(
+                onRefresh: _refreshDevices,
+                child: const SingleChildScrollView(
+                  physics: AlwaysScrollableScrollPhysics(),
+                  child: SizedBox(height: 600, child: _EmptyDevicesView()),
+                ),
+              );
             }
 
             final filteredDevices = _filterDevices(devices);
             final hasSearchResults = filteredDevices.isNotEmpty;
 
-            return ListView.separated(
-              padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
-              itemCount: hasSearchResults
-                  ? filteredDevices.length +
-                        (_searchQuery.trim().isEmpty ? 2 : 3)
-                  : 2,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return Row(
-                    children: [
-                      Expanded(
-                        child: _SearchField(
-                          controller: _searchController,
-                          hintText: l10n.searchDevices,
-                          hasText: _searchQuery.trim().isNotEmpty,
-                          onChanged: (value) {
-                            setState(() {
-                              _searchQuery = value;
-                            });
-                          },
+            return RefreshIndicator(
+              onRefresh: _refreshDevices,
+              child: ListView.separated(
+                physics: const AlwaysScrollableScrollPhysics(),
+                padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+                itemCount: hasSearchResults
+                    ? filteredDevices.length +
+                          (_searchQuery.trim().isEmpty ? 2 : 3)
+                    : 2,
+                separatorBuilder: (_, __) => const SizedBox(height: 12),
+                itemBuilder: (context, index) {
+                  if (index == 0) {
+                    return Row(
+                      children: [
+                        Expanded(
+                          child: _SearchField(
+                            controller: _searchController,
+                            hintText: l10n.searchDevices,
+                            hasText: _searchQuery.trim().isNotEmpty,
+                            onChanged: (value) {
+                              setState(() {
+                                _searchQuery = value;
+                              });
+                            },
+                          ),
                         ),
-                      ),
-                      const SizedBox(width: 12),
-                      Material(
-                        color: Theme.of(
-                          context,
-                        ).colorScheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(16),
-                        child: InkWell(
+                        const SizedBox(width: 12),
+                        Material(
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(16),
-                          onTap: () =>
-                              _showSortSheet(context, ref, currentSortType),
-                          child: SizedBox(
-                            width: 56,
-                            height: 56,
-                            child: Icon(
-                              Icons.sort_rounded,
-                              color: Theme.of(context).colorScheme.primary,
+                          child: InkWell(
+                            borderRadius: BorderRadius.circular(16),
+                            onTap: () =>
+                                _showSortSheet(context, ref, currentSortType),
+                            child: SizedBox(
+                              width: 56,
+                              height: 56,
+                              child: Icon(
+                                Icons.sort_rounded,
+                                color: Theme.of(context).colorScheme.primary,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
-                  );
-                }
-
-                if (index == 1) {
-                  return _SortSummary(sortType: sortType);
-                }
-
-                if (!hasSearchResults) {
-                  return _NoSearchResultsView(query: _searchQuery);
-                }
-
-                if (hasSearchResults &&
-                    _searchQuery.trim().isNotEmpty &&
-                    index == 2) {
-                  return _SearchResultSummary(count: filteredDevices.length);
-                }
-
-                final deviceIndex = _searchQuery.trim().isEmpty
-                    ? index - 2
-                    : index - 3;
-                final device = filteredDevices[deviceIndex];
-
-                return _DeviceCard(
-                  device: device,
-                  onWake: () => _wakeDevice(context, ref, device),
-                  onTest: () => _testDevice(context, ref, device),
-                  onToggleFavorite: () {
-                    ref
-                        .read(devicesControllerProvider.notifier)
-                        .toggleFavorite(device.id);
-                  },
-                  onEdit: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(
-                        builder: (_) => DeviceFormScreen(device: device),
-                      ),
+                      ],
                     );
-                  },
-                  onDelete: () => _deleteDevice(context, ref, device),
-                );
-              },
+                  }
+
+                  if (index == 1) {
+                    return _SortSummary(sortType: sortType);
+                  }
+
+                  if (!hasSearchResults) {
+                    return _NoSearchResultsView(query: _searchQuery);
+                  }
+
+                  if (hasSearchResults &&
+                      _searchQuery.trim().isNotEmpty &&
+                      index == 2) {
+                    return _SearchResultSummary(count: filteredDevices.length);
+                  }
+
+                  final deviceIndex = _searchQuery.trim().isEmpty
+                      ? index - 2
+                      : index - 3;
+                  final device = filteredDevices[deviceIndex];
+
+                  return _DeviceCard(
+                    device: device,
+                    onWake: () => _wakeDevice(context, ref, device),
+                    onTest: () => _testDevice(context, ref, device),
+                    onToggleFavorite: () {
+                      ref
+                          .read(devicesControllerProvider.notifier)
+                          .toggleFavorite(device.id);
+                    },
+                    onEdit: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DeviceFormScreen(device: device),
+                        ),
+                      );
+                    },
+                    onDelete: () => _deleteDevice(context, ref, device),
+                  );
+                },
+              ),
             );
           },
           loading: () {
@@ -231,6 +251,10 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
         ),
       ),
     );
+  }
+
+  Future<void> _refreshDevices() async {
+    await ref.read(devicesControllerProvider.notifier).refreshDeviceStatuses();
   }
 
   // Send the wake packet and show immediate feedback for the selected device.
@@ -514,7 +538,9 @@ class _DeviceCard extends StatelessWidget {
                 color: theme.colorScheme.onSurfaceVariant,
               ),
             ),
-            const SizedBox(height: 4),
+            const SizedBox(height: 10),
+            _DeviceStatusRow(device: device),
+            const SizedBox(height: 10),
             Text(
               lastWakeText,
               style: theme.textTheme.bodySmall?.copyWith(
@@ -753,6 +779,108 @@ class _SortSummary extends StatelessWidget {
         style: theme.textTheme.bodySmall?.copyWith(
           color: theme.colorScheme.onSurfaceVariant,
           fontWeight: FontWeight.w600,
+        ),
+      ),
+    );
+  }
+}
+
+class _DeviceStatusRow extends StatelessWidget {
+  final WakeDevice device;
+
+  const _DeviceStatusRow({required this.device});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    final statusText = _statusText(context, device.connectionStatus);
+    final statusColor = _statusColor(theme, device.connectionStatus);
+    final lastSeenText = device.lastSeenAt == null
+        ? l10n.lastSeenNever
+        : l10n.lastSeenAt(
+            DateFormat(
+              'MMM d, HH:mm',
+              Localizations.localeOf(context).toLanguageTag(),
+            ).format(device.lastSeenAt!),
+          );
+
+    return Wrap(
+      spacing: 8,
+      runSpacing: 8,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: [
+        _StatusChip(color: statusColor, text: statusText),
+        Text(
+          lastSeenText,
+          style: theme.textTheme.bodySmall?.copyWith(
+            color: theme.colorScheme.onSurfaceVariant,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ],
+    );
+  }
+
+  String _statusText(BuildContext context, DeviceConnectionStatus status) {
+    final l10n = AppLocalizations.of(context)!;
+
+    switch (status) {
+      case DeviceConnectionStatus.online:
+        return l10n.online;
+      case DeviceConnectionStatus.offline:
+        return l10n.offline;
+      case DeviceConnectionStatus.unknown:
+        return l10n.unknown;
+    }
+  }
+
+  Color _statusColor(ThemeData theme, DeviceConnectionStatus status) {
+    switch (status) {
+      case DeviceConnectionStatus.online:
+        return Colors.green;
+      case DeviceConnectionStatus.offline:
+        return theme.colorScheme.error;
+      case DeviceConnectionStatus.unknown:
+        return theme.colorScheme.outline;
+    }
+  }
+}
+
+class _StatusChip extends StatelessWidget {
+  final Color color;
+  final String text;
+
+  const _StatusChip({required this.color, required this.text});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        border: Border.all(color: color.withValues(alpha: 0.6)),
+        borderRadius: BorderRadius.circular(999),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DecoratedBox(
+              decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+              child: const SizedBox(width: 7, height: 7),
+            ),
+            const SizedBox(width: 6),
+            Text(
+              text,
+              style: theme.textTheme.labelSmall?.copyWith(
+                color: color,
+                fontWeight: FontWeight.w900,
+              ),
+            ),
+          ],
         ),
       ),
     );

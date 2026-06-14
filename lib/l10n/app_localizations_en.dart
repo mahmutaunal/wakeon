@@ -62,14 +62,14 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get addDeviceProfileDescription =>
-      'Add a computer you want to wake from this device.';
+      'Add a device you want to wake from this device.';
 
   @override
   String get howToFindMacAddress => 'How to find your MAC address';
 
   @override
   String get windowsCommandPromptInstruction =>
-      'Find the MAC address of the device you want to wake. On Windows, open Command Prompt and run:';
+      'Find the MAC address of the device you want to wake. Open Command Prompt and run:';
 
   @override
   String get usePhysicalAddressInstruction =>
@@ -511,4 +511,51 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get macHelpLinuxCommand => 'ip link';
+
+  @override
+  String get hostnameDetected => 'Hostname detected';
+
+  @override
+  String get hostnameNotAvailable => 'Hostname not available';
+
+  @override
+  String get hostAddress => 'Host address';
+
+  @override
+  String get hostAddressHint => '192.168.1.42';
+
+  @override
+  String get online => 'Online';
+
+  @override
+  String get offline => 'Offline';
+
+  @override
+  String get unknown => 'Unknown';
+
+  @override
+  String get lastSeenNever => 'Last seen: never';
+
+  @override
+  String lastSeenAt(Object date) {
+    return 'Last seen: $date';
+  }
+
+  @override
+  String get insertDot => 'Insert dot';
+
+  @override
+  String get networkAddressHelpTitle => 'Network address help';
+
+  @override
+  String get hostAddressHelpDescription =>
+      'The device IP address used to check online/offline status. It can be filled automatically from network scan results.';
+
+  @override
+  String get broadcastAddressHelpDescription =>
+      'The Wake-on-LAN broadcast address used to send the magic packet. It usually ends with .255.';
+
+  @override
+  String get networkScanAutoFillDescription =>
+      'If you add a device from Network Scan, Wakeon fills the host and broadcast addresses automatically when possible.';
 }

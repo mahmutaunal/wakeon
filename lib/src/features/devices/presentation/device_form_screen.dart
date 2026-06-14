@@ -16,6 +16,7 @@ class DeviceFormScreen extends ConsumerStatefulWidget {
   final String? initialName;
   final String? initialBroadcastAddress;
   final String? initialMacAddress;
+  final String? initialHostAddress;
 
   const DeviceFormScreen({
     super.key,
@@ -23,6 +24,7 @@ class DeviceFormScreen extends ConsumerStatefulWidget {
     this.initialName,
     this.initialBroadcastAddress,
     this.initialMacAddress,
+    this.initialHostAddress,
   });
 
   @override
@@ -36,6 +38,8 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
   late final TextEditingController _macController;
   late final TextEditingController _broadcastController;
   late final TextEditingController _portController;
+  late final TextEditingController _hostController;
+
   WakeDeviceType _selectedType = WakeDeviceType.desktop;
 
   // Determines whether the form should update an existing device.
@@ -65,6 +69,10 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
     _portController = TextEditingController(text: '${device?.port ?? 9}');
 
     _selectedType = widget.device?.type ?? WakeDeviceType.desktop;
+
+    _hostController = TextEditingController(
+      text: device?.hostAddress ?? widget.initialHostAddress ?? '',
+    );
   }
 
   @override
@@ -73,6 +81,7 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
     _macController.dispose();
     _broadcastController.dispose();
     _portController.dispose();
+    _hostController.dispose();
     super.dispose();
   }
 
@@ -157,9 +166,25 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
               ),
               const SizedBox(height: 16),
               TextFormField(
+                controller: _hostController,
+                textInputAction: TextInputAction.next,
+                keyboardType: TextInputType.text,
+                inputFormatters: [
+                  FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
+                ],
+                decoration: InputDecoration(
+                  labelText: l10n.hostAddress,
+                  hintText: l10n.hostAddressHint,
+                  prefixIcon: const Icon(Icons.lan_rounded),
+                  suffixIcon: _DotInsertButton(controller: _hostController),
+                ),
+                validator: _optionalIpValidator,
+              ),
+              const SizedBox(height: 16),
+              TextFormField(
                 controller: _broadcastController,
                 textInputAction: TextInputAction.next,
-                keyboardType: TextInputType.number,
+                keyboardType: TextInputType.text,
                 inputFormatters: [
                   FilteringTextInputFormatter.allow(RegExp(r'[0-9.]')),
                 ],
@@ -167,6 +192,9 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
                   labelText: l10n.broadcastAddress,
                   hintText: l10n.broadcastAddressHint,
                   prefixIcon: const Icon(Icons.router_rounded),
+                  suffixIcon: _DotInsertButton(
+                    controller: _broadcastController,
+                  ),
                 ),
                 validator: _ipValidator,
               ),
@@ -185,8 +213,9 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
                 onFieldSubmitted: (_) => _save(),
               ),
               const SizedBox(height: 24),
+              const _NetworkAddressHelpCard(),
+              const SizedBox(height: 16),
               const _HelpCard(),
-              const SizedBox(height: 96),
             ],
           ),
         ),
@@ -209,6 +238,30 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
 
     if (text.isEmpty) {
       return AppLocalizations.of(context)!.broadcastAddressRequired;
+    }
+
+    final parts = text.split('.');
+
+    if (parts.length != 4) {
+      return AppLocalizations.of(context)!.invalidIpv4Address;
+    }
+
+    for (final part in parts) {
+      final number = int.tryParse(part);
+
+      if (number == null || number < 0 || number > 255) {
+        return AppLocalizations.of(context)!.invalidIpv4Address;
+      }
+    }
+
+    return null;
+  }
+
+  String? _optionalIpValidator(String? value) {
+    final text = value?.trim() ?? '';
+
+    if (text.isEmpty) {
+      return null;
     }
 
     final parts = text.split('.');
@@ -277,6 +330,9 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
       createdAt: existingDevice?.createdAt ?? now,
       lastWakeAt: existingDevice?.lastWakeAt,
       isFavorite: existingDevice?.isFavorite ?? false,
+      hostAddress: _hostController.text.trim().isEmpty
+          ? null
+          : _hostController.text.trim(),
     );
 
     final controller = ref.read(devicesControllerProvider.notifier);
@@ -298,10 +354,7 @@ class _BottomSaveBar extends StatelessWidget {
   final String label;
   final VoidCallback onPressed;
 
-  const _BottomSaveBar({
-    required this.label,
-    required this.onPressed,
-  });
+  const _BottomSaveBar({required this.label, required this.onPressed});
 
   @override
   Widget build(BuildContext context) {
@@ -313,9 +366,7 @@ class _BottomSaveBar extends StatelessWidget {
         decoration: BoxDecoration(
           color: theme.colorScheme.surface,
           border: Border(
-            top: BorderSide(
-              color: theme.colorScheme.outlineVariant,
-            ),
+            top: BorderSide(color: theme.colorScheme.outlineVariant),
           ),
           boxShadow: [
             BoxShadow(
@@ -335,6 +386,130 @@ class _BottomSaveBar extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class _DotInsertButton extends StatelessWidget {
+  final TextEditingController controller;
+
+  const _DotInsertButton({required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
+    return IconButton(
+      tooltip: AppLocalizations.of(context)!.insertDot,
+      onPressed: () {
+        final selection = controller.selection;
+        final text = controller.text;
+        final cursorIndex = selection.isValid ? selection.start : text.length;
+        final safeIndex = cursorIndex.clamp(0, text.length);
+        final updatedText = text.replaceRange(safeIndex, safeIndex, '.');
+
+        controller.value = TextEditingValue(
+          text: updatedText,
+          selection: TextSelection.collapsed(offset: safeIndex + 1),
+        );
+      },
+      icon: const Text(
+        '.',
+        style: TextStyle(fontSize: 24, fontWeight: FontWeight.w900),
+      ),
+    );
+  }
+}
+
+class _NetworkAddressHelpCard extends StatelessWidget {
+  const _NetworkAddressHelpCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return Card(
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Icon(
+                  Icons.info_outline_rounded,
+                  color: theme.colorScheme.primary,
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Text(
+                    l10n.networkAddressHelpTitle,
+                    style: theme.textTheme.titleSmall?.copyWith(
+                      fontWeight: FontWeight.w800,
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            const SizedBox(height: 12),
+            _AddressHelpRow(
+              title: l10n.hostAddress,
+              description: l10n.hostAddressHelpDescription,
+            ),
+            const SizedBox(height: 10),
+            _AddressHelpRow(
+              title: l10n.broadcastAddress,
+              description: l10n.broadcastAddressHelpDescription,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              l10n.networkScanAutoFillDescription,
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _AddressHelpRow extends StatelessWidget {
+  final String title;
+  final String description;
+
+  const _AddressHelpRow({required this.title, required this.description});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Icon(Icons.circle_rounded, size: 8, color: theme.colorScheme.primary),
+        const SizedBox(width: 10),
+        Expanded(
+          child: RichText(
+            text: TextSpan(
+              style: theme.textTheme.bodyMedium?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+              children: [
+                TextSpan(
+                  text: '$title: ',
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    fontWeight: FontWeight.w800,
+                    color: theme.colorScheme.onSurface,
+                  ),
+                ),
+                TextSpan(text: description),
+              ],
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
@@ -452,10 +627,7 @@ class _CommandBlock extends StatelessWidget {
   final String title;
   final String command;
 
-  const _CommandBlock({
-    required this.title,
-    required this.command,
-  });
+  const _CommandBlock({required this.title, required this.command});
 
   @override
   Widget build(BuildContext context) {

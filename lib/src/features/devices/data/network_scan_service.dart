@@ -72,9 +72,11 @@ class NetworkScanService {
 
         await socket.close();
 
+        final hostname = await _resolveHostname(ipAddress);
+
         return DiscoveredDevice(
           ipAddress: ipAddress,
-          hostname: null,
+          hostname: hostname,
           macAddress: null,
           isReachable: true,
         );
@@ -82,6 +84,49 @@ class NetworkScanService {
     }
 
     return null;
+  }
+
+  Future<String?> _resolveHostname(String ipAddress) async {
+    try {
+      final address = InternetAddress(ipAddress);
+      final reversedAddress = await address.reverse();
+
+      final host = reversedAddress.host.trim();
+
+      if (host.isEmpty || host == ipAddress) {
+        return null;
+      }
+
+      return _formatHostname(host);
+    } catch (_) {
+      return null;
+    }
+  }
+
+  String _formatHostname(String hostname) {
+    final cleanedHostname = hostname
+        .replaceAll(RegExp(r'\.local$', caseSensitive: false), '')
+        .replaceAll(RegExp(r'\.lan$', caseSensitive: false), '')
+        .replaceAll(RegExp(r'\.home$', caseSensitive: false), '')
+        .replaceAll('-', ' ')
+        .replaceAll('_', ' ')
+        .trim();
+
+    if (cleanedHostname.isEmpty) {
+      return hostname;
+    }
+
+    return cleanedHostname
+        .split(RegExp(r'\s+'))
+        .where((part) => part.isNotEmpty)
+        .map((part) {
+          if (part.length == 1) {
+            return part.toUpperCase();
+          }
+
+          return '${part[0].toUpperCase()}${part.substring(1).toLowerCase()}';
+        })
+        .join(' ');
   }
 
   // Keeps discovered devices ordered by the last IPv4 octet.

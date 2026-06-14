@@ -104,6 +104,7 @@ class _NetworkScanScreenState extends ConsumerState<NetworkScanScreen> {
       MaterialPageRoute(
         builder: (_) => DeviceFormScreen(
           initialName: device.hostname ?? l10n.deviceWithIp(device.ipAddress),
+          initialHostAddress: device.ipAddress,
           initialMacAddress: device.macAddress,
           initialBroadcastAddress: scanService.getBroadcastAddressFromIp(
             device.ipAddress,
@@ -200,9 +201,19 @@ class _DiscoveredDeviceCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        device.hostname ?? l10n.unknownDevice,
+                        device.hostname ?? l10n.deviceWithIp(device.ipAddress),
                         style: theme.textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        device.hostname == null
+                            ? l10n.hostnameNotAvailable
+                            : l10n.hostnameDetected,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.primary,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                       const SizedBox(height: 4),

@@ -6,12 +6,6 @@ Wake your computers, servers, NAS devices, and other Wake-on-LAN compatible hard
 
 Designed with simplicity in mind, Wakeon focuses on reliability, privacy, and a clean Material 3 user experience.
 
-## Preview
-
-![Wakeon Home Dark](assets/screenshots/android/en/6.png)
-
-Modern, privacy-first Wake-on-LAN experience built with Flutter.
-
 ## Features
 
 ### Core Features

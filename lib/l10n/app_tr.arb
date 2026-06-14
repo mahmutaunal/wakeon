@@ -17,9 +17,9 @@
   "invalidPort": "Geçerli bir port girin.",
   "portRangeError": "Port 1 ile 65535 arasında olmalıdır.",
   "updateDeviceProfileDescription": "Bu Wake-on-LAN cihaz profilini güncelle.",
-  "addDeviceProfileDescription": "Bu cihazdan uyandırmak istediğin bilgisayarı ekle.",
+  "addDeviceProfileDescription": "Bu cihazdan uyandırmak istediğin cihazu ekle.",
   "howToFindMacAddress": "MAC adresini nasıl bulursun?",
-  "windowsCommandPromptInstruction": "Windows’ta Komut İstemi’ni aç ve şunu çalıştır:",
+  "windowsCommandPromptInstruction": "Uyandırmak istediğiniz cihazın MAC adresini bulun. Komut İstemi’ni aç ve şunu çalıştır:",
   "usePhysicalAddressInstruction": "Ethernet bağdaştırıcının Fiziksel Adres değerini kullan.",
   "edit": "Düzenle",
   "wakePacketSent": "{deviceName} cihazına uyandırma paketi gönderildi.",
@@ -195,5 +195,24 @@
   "macHelpMacosTitle": "macOS",
   "macHelpMacosCommand": "ifconfig",
   "macHelpLinuxTitle": "Linux",
-  "macHelpLinuxCommand": "ip link"
+  "macHelpLinuxCommand": "ip link",
+  "hostnameDetected": "Cihaz adı algılandı",
+  "hostnameNotAvailable": "Cihaz adı bulunamadı",
+  "hostAddress": "Host adresi",
+  "hostAddressHint": "192.168.1.42",
+  "online": "Çevrimiçi",
+  "offline": "Çevrimdışı",
+  "unknown": "Bilinmiyor",
+  "lastSeenNever": "Son görülme: hiç",
+  "lastSeenAt": "Son görülme: {date}",
+  "@lastSeenAt": {
+    "placeholders": {
+      "date": {}
+    }
+  },
+  "insertDot": "Nokta ekle",
+  "networkAddressHelpTitle": "Ağ adresi yardımı",
+  "hostAddressHelpDescription": "Çevrimiçi/çevrimdışı durumunu kontrol etmek için kullanılan cihaz IP adresidir. Ağ taraması sonucundan otomatik doldurulabilir.",
+  "broadcastAddressHelpDescription": "Magic packet göndermek için kullanılan Wake-on-LAN broadcast adresidir. Genellikle .255 ile biter.",
+  "networkScanAutoFillDescription": "Cihazı Ağ Taraması üzerinden eklerseniz Wakeon mümkün olduğunda host ve broadcast adreslerini otomatik doldurur."
 }

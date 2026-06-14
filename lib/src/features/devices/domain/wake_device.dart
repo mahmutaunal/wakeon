@@ -1,4 +1,5 @@
 import 'wake_device_type.dart';
+import 'device_connection_status.dart';
 
 /// Represents a Wake-on-LAN target device stored by the application.
 class WakeDevice {
@@ -11,6 +12,9 @@ class WakeDevice {
   final DateTime createdAt;
   final DateTime? lastWakeAt;
   final bool isFavorite;
+  final DeviceConnectionStatus connectionStatus;
+  final DateTime? lastSeenAt;
+  final String? hostAddress;
 
   const WakeDevice({
     required this.type,
@@ -22,6 +26,9 @@ class WakeDevice {
     required this.createdAt,
     this.lastWakeAt,
     this.isFavorite = false,
+    this.connectionStatus = DeviceConnectionStatus.unknown,
+    this.lastSeenAt,
+    this.hostAddress,
   });
 
   /// Creates a modified copy of this device instance.
@@ -36,6 +43,11 @@ class WakeDevice {
     DateTime? lastWakeAt,
     bool clearLastWakeAt = false,
     bool? isFavorite,
+    DeviceConnectionStatus? connectionStatus,
+    DateTime? lastSeenAt,
+    bool clearLastSeenAt = false,
+    String? hostAddress,
+    bool clearHostAddress = false,
   }) {
     return WakeDevice(
       type: type ?? this.type,
@@ -48,6 +60,9 @@ class WakeDevice {
       // Allow explicitly clearing the last wake timestamp.
       lastWakeAt: clearLastWakeAt ? null : lastWakeAt ?? this.lastWakeAt,
       isFavorite: isFavorite ?? this.isFavorite,
+      connectionStatus: connectionStatus ?? this.connectionStatus,
+      lastSeenAt: clearLastSeenAt ? null : lastSeenAt ?? this.lastSeenAt,
+      hostAddress: clearHostAddress ? null : hostAddress ?? this.hostAddress,
     );
   }
 
@@ -65,6 +80,13 @@ class WakeDevice {
           ? null
           : DateTime.parse(json['lastWakeAt'] as String),
       isFavorite: json['isFavorite'] as bool? ?? false,
+      connectionStatus: DeviceConnectionStatus.unknown,
+      lastSeenAt: json['lastSeenAt'] == null
+          ? null
+          : DateTime.parse(json['lastSeenAt'] as String),
+      hostAddress: (json['hostAddress'] as String?)?.trim().isEmpty == true
+          ? null
+          : json['hostAddress'] as String?,
     );
   }
 
@@ -80,6 +102,8 @@ class WakeDevice {
       'createdAt': createdAt.toIso8601String(),
       'lastWakeAt': lastWakeAt?.toIso8601String(),
       'isFavorite': isFavorite,
+      'lastSeenAt': lastSeenAt?.toIso8601String(),
+      'hostAddress': hostAddress,
     };
   }
 }
