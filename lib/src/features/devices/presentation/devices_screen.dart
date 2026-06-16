@@ -42,6 +42,7 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
       return device.name.toLowerCase().contains(query) ||
           device.macAddress.toLowerCase().contains(query) ||
           device.broadcastAddress.toLowerCase().contains(query) ||
+          (device.hostAddress?.toLowerCase().contains(query) ?? false) ||
           typeName.contains(query);
     }).toList();
   }
