@@ -4,11 +4,7 @@ import 'package:wakeon/src/app/wakeon_app.dart';
 
 void main() {
   testWidgets('Wakeon app starts successfully', (tester) async {
-    await tester.pumpWidget(
-      const ProviderScope(
-        child: WakeonApp(),
-      ),
-    );
+    await tester.pumpWidget(const ProviderScope(child: WakeonApp()));
 
     expect(find.byType(WakeonApp), findsOneWidget);
   });

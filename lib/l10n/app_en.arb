@@ -214,5 +214,39 @@
   "networkAddressHelpTitle": "Network address help",
   "hostAddressHelpDescription": "The device IP address used to check online/offline status. It can be filled automatically from network scan results.",
   "broadcastAddressHelpDescription": "The Wake-on-LAN broadcast address used to send the magic packet. It usually ends with .255.",
-  "networkScanAutoFillDescription": "If you add a device from Network Scan, Wakeon fills the host and broadcast addresses automatically when possible."
+  "networkScanAutoFillDescription": "If you add a device from Network Scan, Wakeon fills the host and broadcast addresses automatically when possible.",
+  "test": "Test",
+  "more": "More",
+  "deviceActions": "Device actions",
+  "share": "Share",
+  "shareDeviceDescription": "Share this device with another device.",
+  "shareComingSoon": "Device sharing will be added in a future version.",
+  "editDeviceDescription": "Edit device information.",
+  "deleteDeviceDescription": "Remove this device from the list.",
+  "shareCodeTitle": "Share code",
+  "shareCodeDescription": "Send this code to the other device separately. The .wakeon file cannot be opened without this code.",
+  "copyCode": "Copy code",
+  "shareCodeCopied": "Share code copied.",
+  "couldNotShareDevice": "Could not share device: {error}",
+  "@couldNotShareDevice": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "ok": "OK",
+  "importSharedDevice": "Import shared device",
+  "importSharedDeviceDescription": "Import a .wakeon device file using a share code.",
+  "enterShareCode": "Enter share code",
+  "shareCode": "Share code",
+  "continueText": "Continue",
+  "shareExpired": "This shared device file has expired.",
+  "invalidShareFile": "Invalid Wakeon share file.",
+  "couldNotImportSharedDevice": "Could not import shared device: {error}",
+  "@couldNotImportSharedDevice": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "invalidShareCode": "Enter a valid 6-digit share code.",
+  "sharedDeviceAlreadyExists": "This shared device already exists."
 }

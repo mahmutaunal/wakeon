@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:wakeon/l10n/app_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/services.dart';
 
 import '../domain/wake_device_type.dart';
 import '../domain/wake_device.dart';
@@ -225,6 +226,7 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
                     device: device,
                     onWake: () => _wakeDevice(context, ref, device),
                     onTest: () => _testDevice(context, ref, device),
+                    onShare: () => _shareDevice(context, ref, device),
                     onToggleFavorite: () {
                       ref
                           .read(devicesControllerProvider.notifier)
@@ -423,6 +425,89 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
         .read(devicesControllerProvider.notifier)
         .changeSortType(selectedSortType);
   }
+
+  Future<void> _shareDevice(
+    BuildContext context,
+    WidgetRef ref,
+    WakeDevice device,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+
+    try {
+      final shareCode = await ref
+          .read(deviceShareManagerProvider)
+          .shareDevice(device);
+
+      if (!context.mounted) return;
+
+      await showDialog<void>(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Text(
+              l10n.shareCodeTitle,
+              textAlign: TextAlign.center,
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Text(
+                  l10n.shareCodeDescription,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w600,
+                      ),
+                ),
+                const SizedBox(height: 18),
+                SelectableText(
+                  shareCode,
+                  textAlign: TextAlign.center,
+                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.w900,
+                        letterSpacing: 4,
+                      ),
+                ),
+              ],
+            ),
+            actionsAlignment: MainAxisAlignment.center,
+            actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+            actions: [
+              SizedBox(
+                width: double.infinity,
+                child: TextButton(
+                  onPressed: () async {
+                    await Clipboard.setData(ClipboardData(text: shareCode));
+
+                    if (!context.mounted) return;
+
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(l10n.shareCodeCopied)),
+                    );
+                  },
+                  child: Text(l10n.copyCode),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Center(
+                child: FilledButton(
+                  onPressed: () => Navigator.of(context).pop(),
+                  child: Text(l10n.ok),
+                ),
+              ),
+            ],
+          );
+        },
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(l10n.couldNotShareDevice(error.toString()))),
+      );
+    }
+  }
 }
 
 /// Card that displays a saved device and its primary actions.
@@ -431,6 +516,7 @@ class _DeviceCard extends StatelessWidget {
   final VoidCallback onWake;
   final VoidCallback onToggleFavorite;
   final VoidCallback onTest;
+  final VoidCallback onShare;
   final VoidCallback onEdit;
   final VoidCallback onDelete;
 
@@ -439,6 +525,7 @@ class _DeviceCard extends StatelessWidget {
     required this.onWake,
     required this.onToggleFavorite,
     required this.onTest,
+    required this.onShare,
     required this.onEdit,
     required this.onDelete,
   });
@@ -506,28 +593,6 @@ class _DeviceCard extends StatelessWidget {
                         : Icons.star_border_rounded,
                   ),
                 ),
-                PopupMenuButton<String>(
-                  onSelected: (value) {
-                    switch (value) {
-                      case 'test':
-                        onTest();
-                        break;
-                      case 'edit':
-                        onEdit();
-                        break;
-                      case 'delete':
-                        onDelete();
-                        break;
-                    }
-                  },
-                  itemBuilder: (context) {
-                    return [
-                      PopupMenuItem(value: 'test', child: Text(l10n.testSetup)),
-                      PopupMenuItem(value: 'edit', child: Text(l10n.edit)),
-                      PopupMenuItem(value: 'delete', child: Text(l10n.delete)),
-                    ];
-                  },
-                ),
               ],
             ),
             const SizedBox(height: 14),
@@ -549,12 +614,245 @@ class _DeviceCard extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 16),
-            FilledButton.icon(
-              onPressed: onWake,
-              icon: const Icon(Icons.power_settings_new_rounded),
-              label: Text(l10n.wake),
+            SizedBox(
+              width: double.infinity,
+              child: FilledButton.icon(
+                onPressed: onWake,
+                icon: const Icon(Icons.power_settings_new_rounded),
+                label: Text(l10n.wake),
+              ),
+            ),
+            const SizedBox(height: 12),
+            _DeviceQuickActionsRow(
+              onTest: onTest,
+              onMore: () => _showDeviceActionsSheet(
+                context: context,
+                onShare: onShare,
+                onEdit: onEdit,
+                onDelete: onDelete,
+              ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _DeviceQuickActionsRow extends StatelessWidget {
+  final VoidCallback onTest;
+  final VoidCallback onMore;
+
+  const _DeviceQuickActionsRow({required this.onTest, required this.onMore});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final l10n = AppLocalizations.of(context)!;
+
+    return IntrinsicHeight(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _DeviceQuickActionButton(
+            icon: Icons.science_outlined,
+            label: l10n.test,
+            onTap: onTest,
+          ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            child: VerticalDivider(
+              width: 1,
+              thickness: 1,
+              color: theme.colorScheme.outlineVariant,
+            ),
+          ),
+          _DeviceQuickActionButton(
+            icon: Icons.more_horiz_rounded,
+            label: l10n.more,
+            onTap: onMore,
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _DeviceQuickActionButton extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+
+  const _DeviceQuickActionButton({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Expanded(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(16),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 22, color: theme.colorScheme.primary),
+              const SizedBox(width: 8),
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelLarge?.copyWith(
+                    color: theme.colorScheme.primary,
+                    fontWeight: FontWeight.w900,
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+Future<void> _showDeviceActionsSheet({
+  required BuildContext context,
+  required VoidCallback onShare,
+  required VoidCallback onEdit,
+  required VoidCallback onDelete,
+}) async {
+  final l10n = AppLocalizations.of(context)!;
+
+  await showModalBottomSheet<void>(
+    context: context,
+    showDragHandle: true,
+    builder: (context) {
+      return SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  l10n.deviceActions,
+                  style: Theme.of(
+                    context,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+                ),
+              ),
+              const SizedBox(height: 12),
+              _DeviceActionSheetTile(
+                icon: Icons.share_rounded,
+                title: l10n.share,
+                subtitle: l10n.shareDeviceDescription,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  onShare();
+                },
+              ),
+              const SizedBox(height: 8),
+              _DeviceActionSheetTile(
+                icon: Icons.edit_rounded,
+                title: l10n.edit,
+                subtitle: l10n.editDeviceDescription,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  onEdit();
+                },
+              ),
+              const SizedBox(height: 8),
+              _DeviceActionSheetTile(
+                icon: Icons.delete_outline_rounded,
+                title: l10n.delete,
+                subtitle: l10n.deleteDeviceDescription,
+                isDestructive: true,
+                onTap: () {
+                  Navigator.of(context).pop();
+                  onDelete();
+                },
+              ),
+            ],
+          ),
+        ),
+      );
+    },
+  );
+}
+
+class _DeviceActionSheetTile extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final String subtitle;
+  final VoidCallback onTap;
+  final bool isDestructive;
+
+  const _DeviceActionSheetTile({
+    required this.icon,
+    required this.title,
+    required this.subtitle,
+    required this.onTap,
+    this.isDestructive = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final foregroundColor = isDestructive
+        ? theme.colorScheme.error
+        : theme.colorScheme.primary;
+    final backgroundColor = isDestructive
+        ? theme.colorScheme.errorContainer.withValues(alpha: 0.65)
+        : theme.colorScheme.primaryContainer;
+
+    return Card(
+      margin: EdgeInsets.zero,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(24),
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Row(
+            children: [
+              CircleAvatar(
+                backgroundColor: backgroundColor,
+                foregroundColor: foregroundColor,
+                child: Icon(icon),
+              ),
+              const SizedBox(width: 14),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      title,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                    const SizedBox(height: 3),
+                    Text(
+                      subtitle,
+                      style: theme.textTheme.bodySmall?.copyWith(
+                        color: theme.colorScheme.onSurfaceVariant,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

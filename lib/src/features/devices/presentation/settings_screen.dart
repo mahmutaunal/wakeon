@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wakeon/l10n/app_localizations.dart';
+import 'package:flutter/services.dart';
 
+import 'device_form_screen.dart';
 import 'devices_controller.dart';
 import 'remote_wake_guide_screen.dart';
 
@@ -57,6 +59,13 @@ class SettingsScreen extends ConsumerWidget {
               title: l10n.importBackup,
               subtitle: l10n.importBackupDescription,
               onTap: () => _importBackup(context, ref),
+            ),
+            const SizedBox(height: 12),
+            _SettingsTile(
+              icon: Icons.lock_open_rounded,
+              title: l10n.importSharedDevice,
+              subtitle: l10n.importSharedDeviceDescription,
+              onTap: () => _importSharedDevice(context, ref),
             ),
             const SizedBox(height: 24),
             _SectionTitle(title: l10n.trustPrivacy),
@@ -152,6 +161,150 @@ class SettingsScreen extends ConsumerWidget {
         SnackBar(content: Text(l10n.couldNotImportBackup(error.toString()))),
       );
     }
+  }
+
+  Future<void> _importSharedDevice(BuildContext context, WidgetRef ref) async {
+    final l10n = AppLocalizations.of(context)!;
+
+    final shareCode = await _askShareCode(context);
+
+    if (shareCode == null || shareCode.trim().isEmpty) {
+      return;
+    }
+
+    try {
+      final payload = await ref
+          .read(deviceShareManagerProvider)
+          .pickAndDecryptSharedDevice(shareCode: shareCode.trim());
+
+      if (!context.mounted || payload == null) return;
+
+      final existingDevices =
+          ref.read(devicesControllerProvider).valueOrNull?.devices ?? [];
+
+      final normalizedImportedMac = payload.macAddress
+          .replaceAll(RegExp(r'[^A-Fa-f0-9]'), '')
+          .toUpperCase();
+
+      final alreadyExists = existingDevices.any((device) {
+        final normalizedDeviceMac = device.macAddress
+            .replaceAll(RegExp(r'[^A-Fa-f0-9]'), '')
+            .toUpperCase();
+
+        return normalizedDeviceMac == normalizedImportedMac;
+      });
+
+      if (alreadyExists) {
+        ScaffoldMessenger.of(
+          context,
+        ).showSnackBar(SnackBar(content: Text(l10n.sharedDeviceAlreadyExists)));
+        return;
+      }
+
+      Navigator.of(context).push(
+        MaterialPageRoute(
+          builder: (_) => DeviceFormScreen(sharedPayload: payload),
+        ),
+      );
+    } catch (error) {
+      if (!context.mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(_friendlyShareImportError(context, error))),
+      );
+    }
+  }
+
+  Future<String?> _askShareCode(BuildContext context) {
+    return showDialog<String>(
+      context: context,
+      builder: (_) => const _ShareCodeDialog(),
+    );
+  }
+
+  String _friendlyShareImportError(BuildContext context, Object error) {
+    final l10n = AppLocalizations.of(context)!;
+
+    if (error is FormatException) {
+      switch (error.message) {
+        case 'share_expired':
+          return l10n.shareExpired;
+        case 'invalid_share_file':
+          return l10n.invalidShareFile;
+        case 'invalid_share_code':
+          return l10n.invalidShareCode;
+      }
+    }
+
+    return l10n.couldNotImportSharedDevice(error.toString());
+  }
+}
+
+class _ShareCodeDialog extends StatefulWidget {
+  const _ShareCodeDialog();
+
+  @override
+  State<_ShareCodeDialog> createState() => _ShareCodeDialogState();
+}
+
+class _ShareCodeDialogState extends State<_ShareCodeDialog> {
+  late final TextEditingController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+
+    return AlertDialog(
+      title: Text(l10n.enterShareCode),
+      content: TextField(
+        controller: _controller,
+        keyboardType: TextInputType.number,
+        inputFormatters: [FilteringTextInputFormatter.digitsOnly],
+        maxLength: 6,
+        decoration: InputDecoration(
+          labelText: l10n.shareCode,
+          hintText: '123456',
+        ),
+      ),
+      actionsPadding: const EdgeInsets.fromLTRB(24, 0, 24, 24),
+      actions: [
+        SizedBox(
+          width: double.infinity,
+          child: FilledButton(
+            onPressed: () {
+              Navigator.of(context).pop(_controller.text.trim());
+            },
+            child: Text(l10n.continueText),
+          ),
+        ),
+        const SizedBox(height: 8),
+        Center(
+          child: TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            style: TextButton.styleFrom(
+              foregroundColor: theme.colorScheme.primary,
+              textStyle: theme.textTheme.labelLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            child: Text(l10n.cancel),
+          ),
+        ),
+      ],
+    );
   }
 }
 

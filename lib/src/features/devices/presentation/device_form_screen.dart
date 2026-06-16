@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
 
 import '../domain/wake_device.dart';
+import '../../share/domain/shared_device_payload.dart';
 import '../domain/wake_device_type.dart';
 import 'devices_controller.dart';
 import 'network_scan_screen.dart';
@@ -17,6 +18,7 @@ class DeviceFormScreen extends ConsumerStatefulWidget {
   final String? initialBroadcastAddress;
   final String? initialMacAddress;
   final String? initialHostAddress;
+  final SharedDevicePayload? sharedPayload;
 
   const DeviceFormScreen({
     super.key,
@@ -25,6 +27,7 @@ class DeviceFormScreen extends ConsumerStatefulWidget {
     this.initialBroadcastAddress,
     this.initialMacAddress,
     this.initialHostAddress,
+    this.sharedPayload,
   });
 
   @override
@@ -50,29 +53,42 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
     super.initState();
 
     final device = widget.device;
+    final sharedPayload = widget.sharedPayload;
 
     _nameController = TextEditingController(
-      text: device?.name ?? widget.initialName ?? '',
+      text: device?.name ?? sharedPayload?.name ?? widget.initialName ?? '',
     );
 
     _macController = TextEditingController(
-      text: device?.macAddress ?? widget.initialMacAddress ?? '',
+      text:
+          device?.macAddress ??
+          sharedPayload?.macAddress ??
+          widget.initialMacAddress ??
+          '',
+    );
+
+    _hostController = TextEditingController(
+      text:
+          device?.hostAddress ??
+          sharedPayload?.hostAddress ??
+          widget.initialHostAddress ??
+          '',
     );
 
     _broadcastController = TextEditingController(
       text:
           device?.broadcastAddress ??
+          sharedPayload?.broadcastAddress ??
           widget.initialBroadcastAddress ??
           '192.168.1.255',
     );
 
-    _portController = TextEditingController(text: '${device?.port ?? 9}');
-
-    _selectedType = widget.device?.type ?? WakeDeviceType.desktop;
-
-    _hostController = TextEditingController(
-      text: device?.hostAddress ?? widget.initialHostAddress ?? '',
+    _portController = TextEditingController(
+      text: '${device?.port ?? sharedPayload?.port ?? 9}',
     );
+
+    _selectedType =
+        device?.type ?? WakeDeviceType.fromStorageValue(sharedPayload?.type);
   }
 
   @override

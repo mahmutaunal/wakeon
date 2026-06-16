@@ -32,7 +32,13 @@ Designed with simplicity in mind, Wakeon focuses on reliability, privacy, and a 
 - Responsive layout
 - Beginner-friendly setup flow
 
-### Privacy First
+### 🔒 Secure Device Sharing
+
+- Optional share expiration
+- Encrypted share links
+- Easy import/export
+
+### 🔐 Privacy First
 
 - No account required
 - No sign-in required
@@ -41,6 +47,8 @@ Designed with simplicity in mind, Wakeon focuses on reliability, privacy, and a 
 - No analytics
 - No tracking
 - Local-only device storage
+- Device data remains on your device
+- No user accounts
 
 ## Screenshots
 
@@ -164,6 +172,7 @@ Planned:
 - Riverpod
 - SharedPreferences
 - Material 3
+- Cryptography Package
 
 ## Privacy Policy
 

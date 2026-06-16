@@ -2,6 +2,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:network_info_plus/network_info_plus.dart';
 
 import '../../../core/network/wake_on_lan_service.dart';
+import '../../share/data/device_share_file_service.dart';
+import '../../share/data/device_share_manager.dart';
+import '../../share/data/device_share_service.dart';
+import '../../share/data/shared_device_mapper.dart';
 import '../data/device_backup_service.dart';
 import '../data/network_scan_service.dart';
 import '../data/wake_device_repository.dart';
@@ -49,6 +53,26 @@ final devicesControllerProvider =
 final deviceStatusServiceProvider = Provider<DeviceStatusService>(
   (ref) => const DeviceStatusService(),
 );
+
+final deviceShareFileServiceProvider = Provider<DeviceShareFileService>((ref) {
+  return const DeviceShareFileService();
+});
+
+final sharedDeviceMapperProvider = Provider<SharedDeviceMapper>((ref) {
+  return const SharedDeviceMapper();
+});
+
+final deviceShareServiceProvider = Provider<DeviceShareService>((ref) {
+  return DeviceShareService();
+});
+
+final deviceShareManagerProvider = Provider<DeviceShareManager>((ref) {
+  return DeviceShareManager(
+    shareService: ref.watch(deviceShareServiceProvider),
+    fileService: ref.watch(deviceShareFileServiceProvider),
+    mapper: ref.watch(sharedDeviceMapperProvider),
+  );
+});
 
 /// Manages device list state, persistence, sorting, backup, and wake actions.
 class DevicesController extends AsyncNotifier<DevicesUiState> {
@@ -209,7 +233,12 @@ class DevicesController extends AsyncNotifier<DevicesUiState> {
   }
 
   Future<void> refreshDeviceStatuses() async {
-    final currentState = _currentState;
+    final currentState = state.valueOrNull;
+
+    if (currentState == null) {
+      return;
+    }
+
     final statusService = ref.read(deviceStatusServiceProvider);
 
     final updatedDevices = <WakeDevice>[];

@@ -559,4 +559,83 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get networkScanAutoFillDescription =>
       'Cihazı Ağ Taraması üzerinden eklerseniz Wakeon mümkün olduğunda host ve broadcast adreslerini otomatik doldurur.';
+
+  @override
+  String get test => 'Test';
+
+  @override
+  String get more => 'Daha Fazla';
+
+  @override
+  String get deviceActions => 'Cihaz İşlemleri';
+
+  @override
+  String get share => 'Paylaş';
+
+  @override
+  String get shareDeviceDescription => 'Bu cihazı başka cihazlarla paylaş.';
+
+  @override
+  String get shareComingSoon =>
+      'Cihaz paylaşımı gelecek bir sürümde eklenecek.';
+
+  @override
+  String get editDeviceDescription => 'Cihaz bilgilerini düzenle.';
+
+  @override
+  String get deleteDeviceDescription => 'Bu cihazı listeden kaldır.';
+
+  @override
+  String get shareCodeTitle => 'Paylaşım kodu';
+
+  @override
+  String get shareCodeDescription =>
+      'Bu kodu diğer cihaza ayrıca gönderin. .wakeon dosyası bu kod olmadan açılamaz.';
+
+  @override
+  String get copyCode => 'Kodu kopyala';
+
+  @override
+  String get shareCodeCopied => 'Paylaşım kodu kopyalandı.';
+
+  @override
+  String couldNotShareDevice(Object error) {
+    return 'Cihaz paylaşılamadı: $error';
+  }
+
+  @override
+  String get ok => 'Tamam';
+
+  @override
+  String get importSharedDevice => 'Paylaşılan cihazı içe aktar';
+
+  @override
+  String get importSharedDeviceDescription =>
+      '.wakeon cihaz dosyasını paylaşım koduyla içe aktar.';
+
+  @override
+  String get enterShareCode => 'Paylaşım kodunu gir';
+
+  @override
+  String get shareCode => 'Paylaşım kodu';
+
+  @override
+  String get continueText => 'Devam et';
+
+  @override
+  String get shareExpired => 'Bu paylaşılan cihaz dosyasının süresi dolmuş.';
+
+  @override
+  String get invalidShareFile => 'Geçersiz Wakeon paylaşım dosyası.';
+
+  @override
+  String couldNotImportSharedDevice(Object error) {
+    return 'Paylaşılan cihaz içe aktarılamadı: $error';
+  }
+
+  @override
+  String get invalidShareCode => 'Geçerli 6 haneli paylaşım kodu girin.';
+
+  @override
+  String get sharedDeviceAlreadyExists => 'Bu paylaşılan cihaz zaten kayıtlı.';
 }

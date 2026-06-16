@@ -1075,6 +1075,150 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'If you add a device from Network Scan, Wakeon fills the host and broadcast addresses automatically when possible.'**
   String get networkScanAutoFillDescription;
+
+  /// No description provided for @test.
+  ///
+  /// In en, this message translates to:
+  /// **'Test'**
+  String get test;
+
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
+
+  /// No description provided for @deviceActions.
+  ///
+  /// In en, this message translates to:
+  /// **'Device actions'**
+  String get deviceActions;
+
+  /// No description provided for @share.
+  ///
+  /// In en, this message translates to:
+  /// **'Share'**
+  String get share;
+
+  /// No description provided for @shareDeviceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Share this device with another device.'**
+  String get shareDeviceDescription;
+
+  /// No description provided for @shareComingSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Device sharing will be added in a future version.'**
+  String get shareComingSoon;
+
+  /// No description provided for @editDeviceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit device information.'**
+  String get editDeviceDescription;
+
+  /// No description provided for @deleteDeviceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove this device from the list.'**
+  String get deleteDeviceDescription;
+
+  /// No description provided for @shareCodeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Share code'**
+  String get shareCodeTitle;
+
+  /// No description provided for @shareCodeDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Send this code to the other device separately. The .wakeon file cannot be opened without this code.'**
+  String get shareCodeDescription;
+
+  /// No description provided for @copyCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Copy code'**
+  String get copyCode;
+
+  /// No description provided for @shareCodeCopied.
+  ///
+  /// In en, this message translates to:
+  /// **'Share code copied.'**
+  String get shareCodeCopied;
+
+  /// No description provided for @couldNotShareDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not share device: {error}'**
+  String couldNotShareDevice(Object error);
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @importSharedDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Import shared device'**
+  String get importSharedDevice;
+
+  /// No description provided for @importSharedDeviceDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a .wakeon device file using a share code.'**
+  String get importSharedDeviceDescription;
+
+  /// No description provided for @enterShareCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter share code'**
+  String get enterShareCode;
+
+  /// No description provided for @shareCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Share code'**
+  String get shareCode;
+
+  /// No description provided for @continueText.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueText;
+
+  /// No description provided for @shareExpired.
+  ///
+  /// In en, this message translates to:
+  /// **'This shared device file has expired.'**
+  String get shareExpired;
+
+  /// No description provided for @invalidShareFile.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid Wakeon share file.'**
+  String get invalidShareFile;
+
+  /// No description provided for @couldNotImportSharedDevice.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not import shared device: {error}'**
+  String couldNotImportSharedDevice(Object error);
+
+  /// No description provided for @invalidShareCode.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter a valid 6-digit share code.'**
+  String get invalidShareCode;
+
+  /// No description provided for @sharedDeviceAlreadyExists.
+  ///
+  /// In en, this message translates to:
+  /// **'This shared device already exists.'**
+  String get sharedDeviceAlreadyExists;
 }
 
 class _AppLocalizationsDelegate

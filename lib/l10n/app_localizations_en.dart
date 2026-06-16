@@ -558,4 +558,83 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get networkScanAutoFillDescription =>
       'If you add a device from Network Scan, Wakeon fills the host and broadcast addresses automatically when possible.';
+
+  @override
+  String get test => 'Test';
+
+  @override
+  String get more => 'More';
+
+  @override
+  String get deviceActions => 'Device actions';
+
+  @override
+  String get share => 'Share';
+
+  @override
+  String get shareDeviceDescription => 'Share this device with another device.';
+
+  @override
+  String get shareComingSoon =>
+      'Device sharing will be added in a future version.';
+
+  @override
+  String get editDeviceDescription => 'Edit device information.';
+
+  @override
+  String get deleteDeviceDescription => 'Remove this device from the list.';
+
+  @override
+  String get shareCodeTitle => 'Share code';
+
+  @override
+  String get shareCodeDescription =>
+      'Send this code to the other device separately. The .wakeon file cannot be opened without this code.';
+
+  @override
+  String get copyCode => 'Copy code';
+
+  @override
+  String get shareCodeCopied => 'Share code copied.';
+
+  @override
+  String couldNotShareDevice(Object error) {
+    return 'Could not share device: $error';
+  }
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get importSharedDevice => 'Import shared device';
+
+  @override
+  String get importSharedDeviceDescription =>
+      'Import a .wakeon device file using a share code.';
+
+  @override
+  String get enterShareCode => 'Enter share code';
+
+  @override
+  String get shareCode => 'Share code';
+
+  @override
+  String get continueText => 'Continue';
+
+  @override
+  String get shareExpired => 'This shared device file has expired.';
+
+  @override
+  String get invalidShareFile => 'Invalid Wakeon share file.';
+
+  @override
+  String couldNotImportSharedDevice(Object error) {
+    return 'Could not import shared device: $error';
+  }
+
+  @override
+  String get invalidShareCode => 'Enter a valid 6-digit share code.';
+
+  @override
+  String get sharedDeviceAlreadyExists => 'This shared device already exists.';
 }

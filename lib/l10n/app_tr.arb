@@ -214,5 +214,39 @@
   "networkAddressHelpTitle": "Ağ adresi yardımı",
   "hostAddressHelpDescription": "Çevrimiçi/çevrimdışı durumunu kontrol etmek için kullanılan cihaz IP adresidir. Ağ taraması sonucundan otomatik doldurulabilir.",
   "broadcastAddressHelpDescription": "Magic packet göndermek için kullanılan Wake-on-LAN broadcast adresidir. Genellikle .255 ile biter.",
-  "networkScanAutoFillDescription": "Cihazı Ağ Taraması üzerinden eklerseniz Wakeon mümkün olduğunda host ve broadcast adreslerini otomatik doldurur."
+  "networkScanAutoFillDescription": "Cihazı Ağ Taraması üzerinden eklerseniz Wakeon mümkün olduğunda host ve broadcast adreslerini otomatik doldurur.",
+  "test": "Test",
+  "more": "Daha Fazla",
+  "deviceActions": "Cihaz İşlemleri",
+  "share": "Paylaş",
+  "shareDeviceDescription": "Bu cihazı başka cihazlarla paylaş.",
+  "shareComingSoon": "Cihaz paylaşımı gelecek bir sürümde eklenecek.",
+  "editDeviceDescription": "Cihaz bilgilerini düzenle.",
+  "deleteDeviceDescription": "Bu cihazı listeden kaldır.",
+  "shareCodeTitle": "Paylaşım kodu",
+  "shareCodeDescription": "Bu kodu diğer cihaza ayrıca gönderin. .wakeon dosyası bu kod olmadan açılamaz.",
+  "copyCode": "Kodu kopyala",
+  "shareCodeCopied": "Paylaşım kodu kopyalandı.",
+  "couldNotShareDevice": "Cihaz paylaşılamadı: {error}",
+  "@couldNotShareDevice": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "ok": "Tamam",
+  "importSharedDevice": "Paylaşılan cihazı içe aktar",
+  "importSharedDeviceDescription": ".wakeon cihaz dosyasını paylaşım koduyla içe aktar.",
+  "enterShareCode": "Paylaşım kodunu gir",
+  "shareCode": "Paylaşım kodu",
+  "continueText": "Devam et",
+  "shareExpired": "Bu paylaşılan cihaz dosyasının süresi dolmuş.",
+  "invalidShareFile": "Geçersiz Wakeon paylaşım dosyası.",
+  "couldNotImportSharedDevice": "Paylaşılan cihaz içe aktarılamadı: {error}",
+  "@couldNotImportSharedDevice": {
+    "placeholders": {
+      "error": {}
+    }
+  },
+  "invalidShareCode": "Geçerli 6 haneli paylaşım kodu girin.",
+  "sharedDeviceAlreadyExists": "Bu paylaşılan cihaz zaten kayıtlı."
 }
