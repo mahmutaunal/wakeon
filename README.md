@@ -1,5 +1,7 @@
 # Wakeon
 
+[![Google Play](https://img.shields.io/badge/Google_Play-Download-success?logo=google-play)](https://play.google.com/store/apps/details?id=com.alpwarestudio.wakeon)
+
 Wakeon is a simple, modern, and open-source Wake-on-LAN application built with Flutter.
 
 Wake your computers, servers, NAS devices, and other Wake-on-LAN compatible hardware with a single tap.
