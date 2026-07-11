@@ -67,7 +67,9 @@ final deviceShareServiceProvider = Provider<DeviceShareService>((ref) {
   return DeviceShareService();
 });
 
-final widgetDeviceSyncServiceProvider = Provider<WidgetDeviceSyncService>((ref) {
+final widgetDeviceSyncServiceProvider = Provider<WidgetDeviceSyncService>((
+  ref,
+) {
   return const WidgetDeviceSyncService();
 });
 
@@ -99,10 +101,7 @@ class DevicesController extends AsyncNotifier<DevicesUiState> {
     final sortedDevices = _sortDevices(devices, sortType);
     await _widgetDeviceSyncService.syncDevices(sortedDevices);
 
-    return DevicesUiState(
-      devices: sortedDevices,
-      sortType: sortType,
-    );
+    return DevicesUiState(devices: sortedDevices, sortType: sortType);
   }
 
   /// Adds a new device or replaces an existing device with the same ID.
@@ -129,6 +128,20 @@ class DevicesController extends AsyncNotifier<DevicesUiState> {
     final currentState = _currentState;
     final updatedDevices = currentState.devices
         .where((device) => device.id != deviceId)
+        .toList();
+
+    await _setDevices(updatedDevices, currentState.sortType);
+  }
+
+  /// Removes multiple devices in a single persistence and widget sync operation.
+  Future<void> deleteDevices(Set<String> deviceIds) async {
+    if (deviceIds.isEmpty) {
+      return;
+    }
+
+    final currentState = _currentState;
+    final updatedDevices = currentState.devices
+        .where((device) => !deviceIds.contains(device.id))
         .toList();
 
     await _setDevices(updatedDevices, currentState.sortType);

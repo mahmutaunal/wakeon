@@ -637,4 +637,26 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get sharedDeviceAlreadyExists => 'This shared device already exists.';
+
+  @override
+  String selectedDevicesCount(int count) {
+    return '$count selected';
+  }
+
+  @override
+  String get selectAll => 'Select all';
+
+  @override
+  String deleteSelectedDevicesQuestion(int count) {
+    return 'Delete $count devices?';
+  }
+
+  @override
+  String get deleteSelectedDevicesDescription =>
+      'The selected devices will be removed from this device. This action cannot be undone.';
+
+  @override
+  String selectedDevicesDeleted(int count) {
+    return '$count devices deleted.';
+  }
 }

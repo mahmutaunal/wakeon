@@ -14,7 +14,7 @@
   "invalidIpv4Address": "Enter a valid IPv4 address.",
   "macAddressRequired": "MAC address is required.",
   "invalidMacAddress": "Enter a valid MAC address.",
-  "invalidPort": "Enter a valid port.",
+  "invalidPort": "Invalid port.",
   "portRangeError": "Port must be between 1 and 65535.",
   "updateDeviceProfileDescription": "Update this Wake-on-LAN device profile.",
   "addDeviceProfileDescription": "Add a device you want to wake from this device.",
@@ -136,7 +136,6 @@
     }
   },
   "invalidBroadcastAddress": "Invalid broadcast address.",
-  "invalidPort": "Invalid port.",
   "udpSocketFailed": "Could not open UDP socket.",
   "devicesFound": "{count} devices found",
   "@devicesFound": {
@@ -248,5 +247,31 @@
     }
   },
   "invalidShareCode": "Enter a valid 6-digit share code.",
-  "sharedDeviceAlreadyExists": "This shared device already exists."
+  "sharedDeviceAlreadyExists": "This shared device already exists.",
+  "selectedDevicesCount": "{count} selected",
+  "@selectedDevicesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "selectAll": "Select all",
+  "deleteSelectedDevicesQuestion": "Delete {count} devices?",
+  "@deleteSelectedDevicesQuestion": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteSelectedDevicesDescription": "The selected devices will be removed from this device. This action cannot be undone.",
+  "selectedDevicesDeleted": "{count} devices deleted.",
+  "@selectedDevicesDeleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

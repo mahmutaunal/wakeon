@@ -638,4 +638,26 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get sharedDeviceAlreadyExists => 'Bu paylaşılan cihaz zaten kayıtlı.';
+
+  @override
+  String selectedDevicesCount(int count) {
+    return '$count seçildi';
+  }
+
+  @override
+  String get selectAll => 'Tümünü seç';
+
+  @override
+  String deleteSelectedDevicesQuestion(int count) {
+    return '$count cihaz silinsin mi?';
+  }
+
+  @override
+  String get deleteSelectedDevicesDescription =>
+      'Seçilen cihazlar bu cihazdan kaldırılacak. Bu işlem geri alınamaz.';
+
+  @override
+  String selectedDevicesDeleted(int count) {
+    return '$count cihaz silindi.';
+  }
 }

@@ -14,7 +14,7 @@
   "invalidIpv4Address": "Geçerli bir IPv4 adresi girin.",
   "macAddressRequired": "MAC adresi zorunludur.",
   "invalidMacAddress": "Geçerli bir MAC adresi girin.",
-  "invalidPort": "Geçerli bir port girin.",
+  "invalidPort": "Invalid port.",
   "portRangeError": "Port 1 ile 65535 arasında olmalıdır.",
   "updateDeviceProfileDescription": "Bu Wake-on-LAN cihaz profilini güncelle.",
   "addDeviceProfileDescription": "Bu cihazdan uyandırmak istediğin cihazu ekle.",
@@ -136,7 +136,6 @@
     }
   },
   "invalidBroadcastAddress": "Invalid broadcast address.",
-  "invalidPort": "Invalid port.",
   "udpSocketFailed": "Could not open UDP socket.",
   "devicesFound": "{count} cihaz bulundu",
   "@devicesFound": {
@@ -248,5 +247,31 @@
     }
   },
   "invalidShareCode": "Geçerli 6 haneli paylaşım kodu girin.",
-  "sharedDeviceAlreadyExists": "Bu paylaşılan cihaz zaten kayıtlı."
+  "sharedDeviceAlreadyExists": "Bu paylaşılan cihaz zaten kayıtlı.",
+  "selectedDevicesCount": "{count} seçildi",
+  "@selectedDevicesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "selectAll": "Tümünü seç",
+  "deleteSelectedDevicesQuestion": "{count} cihaz silinsin mi?",
+  "@deleteSelectedDevicesQuestion": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "deleteSelectedDevicesDescription": "Seçilen cihazlar bu cihazdan kaldırılacak. Bu işlem geri alınamaz.",
+  "selectedDevicesDeleted": "{count} cihaz silindi.",
+  "@selectedDevicesDeleted": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

@@ -28,6 +28,27 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
   final _searchController = TextEditingController();
 
   String _searchQuery = '';
+  final Set<String> _selectedDeviceIds = <String>{};
+
+  bool get _isSelectionMode => _selectedDeviceIds.isNotEmpty;
+
+  void _enterSelection(String deviceId) {
+    HapticFeedback.selectionClick();
+    setState(() => _selectedDeviceIds.add(deviceId));
+  }
+
+  void _toggleSelection(String deviceId) {
+    setState(() {
+      if (!_selectedDeviceIds.add(deviceId)) {
+        _selectedDeviceIds.remove(deviceId);
+      }
+    });
+  }
+
+  void _clearSelection() {
+    if (_selectedDeviceIds.isEmpty) return;
+    setState(_selectedDeviceIds.clear);
+  }
 
   // Apply a local search filter across device name, MAC address, address, and type.
   List<WakeDevice> _filterDevices(List<WakeDevice> devices) {
@@ -90,167 +111,268 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
     final currentSortType =
         devicesState.valueOrNull?.sortType ?? DeviceSortType.favoritesFirst;
 
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(l10n.appName),
-        actions: [
-          IconButton(
-            tooltip: l10n.scanNetwork,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const NetworkScanScreen()),
-              );
-            },
-            icon: const Icon(Icons.radar_rounded),
+    final selectedDevices =
+        devicesState.valueOrNull?.devices
+            .where((device) => _selectedDeviceIds.contains(device.id))
+            .toList() ??
+        const <WakeDevice>[];
+    final singleSelectedDevice = selectedDevices.length == 1
+        ? selectedDevices.single
+        : null;
+
+    return PopScope(
+      canPop: !_isSelectionMode,
+      onPopInvokedWithResult: (didPop, _) {
+        if (!didPop && _isSelectionMode) {
+          _clearSelection();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          leading: _isSelectionMode
+              ? IconButton(
+                  tooltip: MaterialLocalizations.of(context).closeButtonTooltip,
+                  onPressed: _clearSelection,
+                  icon: const Icon(Icons.close_rounded),
+                )
+              : null,
+          title: AnimatedSwitcher(
+            duration: const Duration(milliseconds: 180),
+            transitionBuilder: (child, animation) => FadeTransition(
+              opacity: animation,
+              child: SizeTransition(
+                sizeFactor: animation,
+                axis: Axis.horizontal,
+                child: child,
+              ),
+            ),
+            child: Text(
+              _isSelectionMode
+                  ? l10n.selectedDevicesCount(_selectedDeviceIds.length)
+                  : l10n.appName,
+              key: ValueKey(_isSelectionMode),
+            ),
           ),
-          IconButton(
-            tooltip: l10n.remoteWakeGuide,
-            onPressed: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(
-                  builder: (_) => const RemoteWakeGuideScreen(),
-                ),
-              );
-            },
-            icon: const Icon(Icons.public_rounded),
-          ),
-          IconButton(
-            tooltip: l10n.settings,
-            onPressed: () {
-              Navigator.of(
-                context,
-              ).push(MaterialPageRoute(builder: (_) => const SettingsScreen()));
-            },
-            icon: const Icon(Icons.settings_rounded),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: l10n.addDevice,
-        onPressed: () {
-          Navigator.of(
-            context,
-          ).push(MaterialPageRoute(builder: (_) => const DeviceFormScreen()));
-        },
-        child: const Icon(Icons.add_rounded),
-      ),
-      body: SafeArea(
-        child: devicesState.when(
-          data: (state) {
-            final devices = state.devices;
-            final sortType = state.sortType;
-
-            if (devices.isEmpty) {
-              return RefreshIndicator(
-                onRefresh: _refreshDevices,
-                child: const SingleChildScrollView(
-                  physics: AlwaysScrollableScrollPhysics(),
-                  child: SizedBox(height: 600, child: _EmptyDevicesView()),
-                ),
-              );
-            }
-
-            final filteredDevices = _filterDevices(devices);
-            final hasSearchResults = filteredDevices.isNotEmpty;
-
-            return RefreshIndicator(
-              onRefresh: _refreshDevices,
-              child: ListView.separated(
-                physics: const AlwaysScrollableScrollPhysics(),
-                padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
-                itemCount: hasSearchResults
-                    ? filteredDevices.length +
-                          (_searchQuery.trim().isEmpty ? 2 : 3)
-                    : 2,
-                separatorBuilder: (_, __) => const SizedBox(height: 12),
-                itemBuilder: (context, index) {
-                  if (index == 0) {
-                    return Row(
-                      children: [
-                        Expanded(
-                          child: _SearchField(
-                            controller: _searchController,
-                            hintText: l10n.searchDevices,
-                            hasText: _searchQuery.trim().isNotEmpty,
-                            onChanged: (value) {
-                              setState(() {
-                                _searchQuery = value;
-                              });
-                            },
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        Material(
-                          color: Theme.of(
-                            context,
-                          ).colorScheme.surfaceContainerHighest,
-                          borderRadius: BorderRadius.circular(16),
-                          child: InkWell(
-                            borderRadius: BorderRadius.circular(16),
-                            onTap: () =>
-                                _showSortSheet(context, ref, currentSortType),
-                            child: SizedBox(
-                              width: 56,
-                              height: 56,
-                              child: Icon(
-                                Icons.sort_rounded,
-                                color: Theme.of(context).colorScheme.primary,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    );
-                  }
-
-                  if (index == 1) {
-                    return _SortSummary(sortType: sortType);
-                  }
-
-                  if (!hasSearchResults) {
-                    return _NoSearchResultsView(query: _searchQuery);
-                  }
-
-                  if (hasSearchResults &&
-                      _searchQuery.trim().isNotEmpty &&
-                      index == 2) {
-                    return _SearchResultSummary(count: filteredDevices.length);
-                  }
-
-                  final deviceIndex = _searchQuery.trim().isEmpty
-                      ? index - 2
-                      : index - 3;
-                  final device = filteredDevices[deviceIndex];
-
-                  return _DeviceCard(
-                    device: device,
-                    onWake: () => _wakeDevice(context, ref, device),
-                    onTest: () => _testDevice(context, ref, device),
-                    onShare: () => _shareDevice(context, ref, device),
-                    onToggleFavorite: () {
-                      ref
-                          .read(devicesControllerProvider.notifier)
-                          .toggleFavorite(device.id);
+          actions: _isSelectionMode
+              ? [
+                  if (singleSelectedDevice != null)
+                    IconButton(
+                      tooltip: l10n.deviceActions,
+                      onPressed: () => _showSelectedDeviceActions(
+                        context,
+                        ref,
+                        singleSelectedDevice,
+                      ),
+                      icon: const Icon(Icons.more_vert_rounded),
+                    ),
+                  IconButton(
+                    tooltip: l10n.selectAll,
+                    onPressed: () {
+                      final allIds =
+                          devicesState.valueOrNull?.devices
+                              .map((device) => device.id)
+                              .toSet() ??
+                          <String>{};
+                      setState(() {
+                        if (_selectedDeviceIds.length == allIds.length) {
+                          _selectedDeviceIds.clear();
+                        } else {
+                          _selectedDeviceIds
+                            ..clear()
+                            ..addAll(allIds);
+                        }
+                      });
                     },
-                    onEdit: () {
+                    icon: Icon(
+                      devicesState.valueOrNull?.devices.length ==
+                              _selectedDeviceIds.length
+                          ? Icons.deselect_rounded
+                          : Icons.select_all_rounded,
+                    ),
+                  ),
+                  IconButton(
+                    tooltip: l10n.delete,
+                    onPressed: () => _deleteSelectedDevices(context, ref),
+                    icon: const Icon(Icons.delete_outline_rounded),
+                  ),
+                ]
+              : [
+                  IconButton(
+                    tooltip: l10n.scanNetwork,
+                    onPressed: () {
                       Navigator.of(context).push(
                         MaterialPageRoute(
-                          builder: (_) => DeviceFormScreen(device: device),
+                          builder: (_) => const NetworkScanScreen(),
                         ),
                       );
                     },
-                    onDelete: () => _deleteDevice(context, ref, device),
-                  );
-                },
-              ),
-            );
-          },
-          loading: () {
-            return const Center(child: CircularProgressIndicator());
-          },
-          error: (error, _) {
-            return _ErrorView(message: error.toString());
-          },
+                    icon: const Icon(Icons.radar_rounded),
+                  ),
+                  IconButton(
+                    tooltip: l10n.remoteWakeGuide,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const RemoteWakeGuideScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.public_rounded),
+                  ),
+                  IconButton(
+                    tooltip: l10n.settings,
+                    onPressed: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => const SettingsScreen(),
+                        ),
+                      );
+                    },
+                    icon: const Icon(Icons.settings_rounded),
+                  ),
+                ],
+        ),
+        floatingActionButton: AnimatedScale(
+          duration: const Duration(milliseconds: 180),
+          scale: _isSelectionMode ? 0 : 1,
+          child: _isSelectionMode
+              ? const SizedBox.shrink()
+              : FloatingActionButton(
+                  tooltip: l10n.addDevice,
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const DeviceFormScreen(),
+                      ),
+                    );
+                  },
+                  child: const Icon(Icons.add_rounded),
+                ),
+        ),
+        body: SafeArea(
+          child: devicesState.when(
+            data: (state) {
+              final devices = state.devices;
+              final sortType = state.sortType;
+
+              if (devices.isEmpty) {
+                return RefreshIndicator(
+                  onRefresh: _refreshDevices,
+                  child: const SingleChildScrollView(
+                    physics: AlwaysScrollableScrollPhysics(),
+                    child: SizedBox(height: 600, child: _EmptyDevicesView()),
+                  ),
+                );
+              }
+
+              final filteredDevices = _filterDevices(devices);
+              final hasSearchResults = filteredDevices.isNotEmpty;
+
+              return RefreshIndicator(
+                onRefresh: _refreshDevices,
+                child: ListView.separated(
+                  physics: const AlwaysScrollableScrollPhysics(),
+                  padding: const EdgeInsets.fromLTRB(16, 8, 16, 96),
+                  itemCount: hasSearchResults
+                      ? filteredDevices.length +
+                            (_searchQuery.trim().isEmpty ? 2 : 3)
+                      : 2,
+                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  itemBuilder: (context, index) {
+                    if (index == 0) {
+                      return Row(
+                        children: [
+                          Expanded(
+                            child: _SearchField(
+                              controller: _searchController,
+                              hintText: l10n.searchDevices,
+                              hasText: _searchQuery.trim().isNotEmpty,
+                              onChanged: (value) {
+                                setState(() {
+                                  _searchQuery = value;
+                                });
+                              },
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Material(
+                            color: Theme.of(
+                              context,
+                            ).colorScheme.surfaceContainerHighest,
+                            borderRadius: BorderRadius.circular(16),
+                            child: InkWell(
+                              borderRadius: BorderRadius.circular(16),
+                              onTap: () =>
+                                  _showSortSheet(context, ref, currentSortType),
+                              child: SizedBox(
+                                width: 56,
+                                height: 56,
+                                child: Icon(
+                                  Icons.sort_rounded,
+                                  color: Theme.of(context).colorScheme.primary,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      );
+                    }
+
+                    if (index == 1) {
+                      return _SortSummary(sortType: sortType);
+                    }
+
+                    if (!hasSearchResults) {
+                      return _NoSearchResultsView(query: _searchQuery);
+                    }
+
+                    if (hasSearchResults &&
+                        _searchQuery.trim().isNotEmpty &&
+                        index == 2) {
+                      return _SearchResultSummary(
+                        count: filteredDevices.length,
+                      );
+                    }
+
+                    final deviceIndex = _searchQuery.trim().isEmpty
+                        ? index - 2
+                        : index - 3;
+                    final device = filteredDevices[deviceIndex];
+
+                    return _DeviceCard(
+                      device: device,
+                      isSelectionMode: _isSelectionMode,
+                      isSelected: _selectedDeviceIds.contains(device.id),
+                      onLongPress: () => _enterSelection(device.id),
+                      onSelectionTap: () => _toggleSelection(device.id),
+                      onWake: () => _wakeDevice(context, ref, device),
+                      onTest: () => _testDevice(context, ref, device),
+                      onShare: () => _shareDevice(context, ref, device),
+                      onToggleFavorite: () {
+                        ref
+                            .read(devicesControllerProvider.notifier)
+                            .toggleFavorite(device.id);
+                      },
+                      onEdit: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(
+                            builder: (_) => DeviceFormScreen(device: device),
+                          ),
+                        );
+                      },
+                      onDelete: () => _deleteDevice(context, ref, device),
+                    );
+                  },
+                ),
+              );
+            },
+            loading: () {
+              return const Center(child: CircularProgressIndicator());
+            },
+            error: (error, _) {
+              return _ErrorView(message: error.toString());
+            },
+          ),
         ),
       ),
     );
@@ -444,10 +566,7 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: Text(
-              l10n.shareCodeTitle,
-              textAlign: TextAlign.center,
-            ),
+            title: Text(l10n.shareCodeTitle, textAlign: TextAlign.center),
             content: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -456,18 +575,18 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
                   l10n.shareCodeDescription,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurfaceVariant,
-                        fontWeight: FontWeight.w600,
-                      ),
+                    color: Theme.of(context).colorScheme.onSurfaceVariant,
+                    fontWeight: FontWeight.w600,
+                  ),
                 ),
                 const SizedBox(height: 18),
                 SelectableText(
                   shareCode,
                   textAlign: TextAlign.center,
                   style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                        fontWeight: FontWeight.w900,
-                        letterSpacing: 4,
-                      ),
+                    fontWeight: FontWeight.w900,
+                    letterSpacing: 4,
+                  ),
                 ),
               ],
             ),
@@ -508,11 +627,193 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
       );
     }
   }
+
+  Future<void> _deleteSelectedDevices(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    if (_selectedDeviceIds.isEmpty) return;
+
+    final l10n = AppLocalizations.of(context)!;
+    final count = _selectedDeviceIds.length;
+    final shouldDelete = await showDialog<bool>(
+      context: context,
+      builder: (dialogContext) => AlertDialog(
+        contentPadding: const EdgeInsets.fromLTRB(24, 24, 24, 20),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Icon(
+              Icons.delete_outline_rounded,
+              size: 32,
+              color: Theme.of(dialogContext).colorScheme.error,
+            ),
+            const SizedBox(height: 16),
+            Text(
+              l10n.deleteSelectedDevicesQuestion(count),
+              style: Theme.of(dialogContext).textTheme.titleLarge?.copyWith(
+                fontWeight: FontWeight.w800,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 12),
+            Text(
+              l10n.deleteSelectedDevicesDescription,
+              style: Theme.of(dialogContext).textTheme.bodyMedium?.copyWith(
+                color: Theme.of(
+                  dialogContext,
+                ).colorScheme.onSurfaceVariant,
+              ),
+              textAlign: TextAlign.center,
+            ),
+            const SizedBox(height: 24),
+            FilledButton(
+              onPressed: () => Navigator.of(dialogContext).pop(true),
+              style: FilledButton.styleFrom(
+                backgroundColor: Theme.of(dialogContext).colorScheme.error,
+                foregroundColor: Theme.of(dialogContext).colorScheme.onError,
+              ),
+              child: Text(l10n.delete),
+            ),
+            const SizedBox(height: 8),
+            Center(
+              child: TextButton(
+                onPressed: () => Navigator.of(dialogContext).pop(false),
+                child: Text(l10n.cancel),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    if (shouldDelete != true || !mounted) return;
+
+    final ids = Set<String>.from(_selectedDeviceIds);
+    await ref.read(devicesControllerProvider.notifier).deleteDevices(ids);
+
+    if (!mounted) return;
+    _clearSelection();
+    ScaffoldMessenger.of(
+      context,
+    ).showSnackBar(SnackBar(content: Text(l10n.selectedDevicesDeleted(count))));
+  }
+
+  Future<void> _showSelectedDeviceActions(
+    BuildContext context,
+    WidgetRef ref,
+    WakeDevice device,
+  ) async {
+    final l10n = AppLocalizations.of(context)!;
+
+    await showModalBottomSheet<void>(
+      context: context,
+      showDragHandle: true,
+      builder: (sheetContext) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(
+                  device.name,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(
+                    sheetContext,
+                  ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w900),
+                ),
+              ),
+              const SizedBox(height: 12),
+              Wrap(
+                spacing: 8,
+                runSpacing: 8,
+                children: [
+                  _SelectionActionChip(
+                    icon: Icons.power_settings_new_rounded,
+                    label: l10n.wake,
+                    onTap: () {
+                      Navigator.of(sheetContext).pop();
+                      _clearSelection();
+                      _wakeDevice(context, ref, device);
+                    },
+                  ),
+                  _SelectionActionChip(
+                    icon: Icons.science_outlined,
+                    label: l10n.test,
+                    onTap: () {
+                      Navigator.of(sheetContext).pop();
+                      _clearSelection();
+                      _testDevice(context, ref, device);
+                    },
+                  ),
+                  _SelectionActionChip(
+                    icon: device.isFavorite
+                        ? Icons.star_rounded
+                        : Icons.star_border_rounded,
+                    label: device.isFavorite
+                        ? l10n.removeFromFavorites
+                        : l10n.addToFavorites,
+                    onTap: () {
+                      Navigator.of(sheetContext).pop();
+                      ref
+                          .read(devicesControllerProvider.notifier)
+                          .toggleFavorite(device.id);
+                      _clearSelection();
+                    },
+                  ),
+                  _SelectionActionChip(
+                    icon: Icons.share_rounded,
+                    label: l10n.share,
+                    onTap: () {
+                      Navigator.of(sheetContext).pop();
+                      _clearSelection();
+                      _shareDevice(context, ref, device);
+                    },
+                  ),
+                  _SelectionActionChip(
+                    icon: Icons.edit_rounded,
+                    label: l10n.edit,
+                    onTap: () {
+                      Navigator.of(sheetContext).pop();
+                      _clearSelection();
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (_) => DeviceFormScreen(device: device),
+                        ),
+                      );
+                    },
+                  ),
+                  _SelectionActionChip(
+                    icon: Icons.delete_outline_rounded,
+                    label: l10n.delete,
+                    isDestructive: true,
+                    onTap: () {
+                      Navigator.of(sheetContext).pop();
+                      _deleteSelectedDevices(context, ref);
+                    },
+                  ),
+                ],
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
 }
 
 /// Card that displays a saved device and its primary actions.
 class _DeviceCard extends StatelessWidget {
   final WakeDevice device;
+  final bool isSelectionMode;
+  final bool isSelected;
+  final VoidCallback onLongPress;
+  final VoidCallback onSelectionTap;
   final VoidCallback onWake;
   final VoidCallback onToggleFavorite;
   final VoidCallback onTest;
@@ -522,6 +823,10 @@ class _DeviceCard extends StatelessWidget {
 
   const _DeviceCard({
     required this.device,
+    required this.isSelectionMode,
+    required this.isSelected,
+    required this.onLongPress,
+    required this.onSelectionTap,
     required this.onWake,
     required this.onToggleFavorite,
     required this.onTest,
@@ -560,81 +865,149 @@ class _DeviceCard extends StatelessWidget {
             DateFormat('MMM d, HH:mm', localeName).format(device.lastWakeAt!),
           );
 
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(18),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 180),
+      curve: Curves.easeOutCubic,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(24),
+        border: isSelected
+            ? Border.all(color: theme.colorScheme.primary, width: 2)
+            : null,
+      ),
+      child: Card(
+        margin: EdgeInsets.zero,
+        clipBehavior: Clip.antiAlias,
+        color: isSelected
+            ? theme.colorScheme.primaryContainer.withValues(alpha: 0.42)
+            : null,
+        child: InkWell(
+          onTap: isSelectionMode ? onSelectionTap : null,
+          onLongPress: isSelectionMode ? onSelectionTap : onLongPress,
+          child: Padding(
+            padding: const EdgeInsets.all(18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                CircleAvatar(
-                  backgroundColor: theme.colorScheme.primaryContainer,
-                  foregroundColor: theme.colorScheme.onPrimaryContainer,
-                  child: Icon(_deviceTypeIcon(device.type)),
-                ),
-                const SizedBox(width: 12),
-                Expanded(
-                  child: Text(
-                    device.name,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontWeight: FontWeight.w700,
+                Row(
+                  children: [
+                    CircleAvatar(
+                      backgroundColor: theme.colorScheme.primaryContainer,
+                      foregroundColor: theme.colorScheme.onPrimaryContainer,
+                      child: Icon(_deviceTypeIcon(device.type)),
                     ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: Text(
+                        device.name,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 160),
+                      transitionBuilder: (child, animation) =>
+                          ScaleTransition(scale: animation, child: child),
+                      child: isSelectionMode
+                          ? Checkbox(
+                              key: ValueKey('selection-$isSelected'),
+                              value: isSelected,
+                              onChanged: (_) => onSelectionTap(),
+                              shape: const CircleBorder(),
+                            )
+                          : IconButton(
+                              key: const ValueKey('favorite'),
+                              tooltip: device.isFavorite
+                                  ? l10n.removeFromFavorites
+                                  : l10n.addToFavorites,
+                              onPressed: onToggleFavorite,
+                              icon: Icon(
+                                device.isFavorite
+                                    ? Icons.star_rounded
+                                    : Icons.star_border_rounded,
+                              ),
+                            ),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 14),
+                Text(device.macAddress, style: theme.textTheme.bodyMedium),
+                const SizedBox(height: 4),
+                Text(
+                  l10n.deviceNetworkAddress(
+                    device.broadcastAddress,
+                    device.port,
+                  ),
+                  style: theme.textTheme.bodyMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
-                IconButton(
-                  tooltip: device.isFavorite
-                      ? l10n.removeFromFavorites
-                      : l10n.addToFavorites,
-                  onPressed: onToggleFavorite,
-                  icon: Icon(
-                    device.isFavorite
-                        ? Icons.star_rounded
-                        : Icons.star_border_rounded,
+                const SizedBox(height: 10),
+                _DeviceStatusRow(device: device),
+                const SizedBox(height: 10),
+                Text(
+                  lastWakeText,
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
+                ),
+                const SizedBox(height: 16),
+                SizedBox(
+                  width: double.infinity,
+                  child: FilledButton.icon(
+                    onPressed: isSelectionMode ? onSelectionTap : onWake,
+                    icon: const Icon(Icons.power_settings_new_rounded),
+                    label: Text(l10n.wake),
+                  ),
+                ),
+                const SizedBox(height: 12),
+                _DeviceQuickActionsRow(
+                  onTest: isSelectionMode ? onSelectionTap : onTest,
+                  onMore: isSelectionMode
+                      ? onSelectionTap
+                      : () => _showDeviceActionsSheet(
+                          context: context,
+                          onShare: onShare,
+                          onEdit: onEdit,
+                          onDelete: onDelete,
+                        ),
                 ),
               ],
             ),
-            const SizedBox(height: 14),
-            Text(device.macAddress, style: theme.textTheme.bodyMedium),
-            const SizedBox(height: 4),
-            Text(
-              l10n.deviceNetworkAddress(device.broadcastAddress, device.port),
-              style: theme.textTheme.bodyMedium?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 10),
-            _DeviceStatusRow(device: device),
-            const SizedBox(height: 10),
-            Text(
-              lastWakeText,
-              style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 16),
-            SizedBox(
-              width: double.infinity,
-              child: FilledButton.icon(
-                onPressed: onWake,
-                icon: const Icon(Icons.power_settings_new_rounded),
-                label: Text(l10n.wake),
-              ),
-            ),
-            const SizedBox(height: 12),
-            _DeviceQuickActionsRow(
-              onTest: onTest,
-              onMore: () => _showDeviceActionsSheet(
-                context: context,
-                onShare: onShare,
-                onEdit: onEdit,
-                onDelete: onDelete,
-              ),
-            ),
-          ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class _SelectionActionChip extends StatelessWidget {
+  final IconData icon;
+  final String label;
+  final VoidCallback onTap;
+  final bool isDestructive;
+
+  const _SelectionActionChip({
+    required this.icon,
+    required this.label,
+    required this.onTap,
+    this.isDestructive = false,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final colors = Theme.of(context).colorScheme;
+    final foreground = isDestructive ? colors.error : colors.primary;
+
+    return ActionChip(
+      avatar: Icon(icon, size: 18, color: foreground),
+      label: Text(label),
+      labelStyle: TextStyle(color: foreground, fontWeight: FontWeight.w700),
+      backgroundColor: isDestructive
+          ? colors.errorContainer.withValues(alpha: 0.55)
+          : colors.primaryContainer.withValues(alpha: 0.7),
+      side: BorderSide.none,
+      onPressed: onTap,
     );
   }
 }

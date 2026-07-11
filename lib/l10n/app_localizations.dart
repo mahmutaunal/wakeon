@@ -1219,6 +1219,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'This shared device already exists.'**
   String get sharedDeviceAlreadyExists;
+
+  /// No description provided for @selectedDevicesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} selected'**
+  String selectedDevicesCount(int count);
+
+  /// No description provided for @selectAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Select all'**
+  String get selectAll;
+
+  /// No description provided for @deleteSelectedDevicesQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {count} devices?'**
+  String deleteSelectedDevicesQuestion(int count);
+
+  /// No description provided for @deleteSelectedDevicesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The selected devices will be removed from this device. This action cannot be undone.'**
+  String get deleteSelectedDevicesDescription;
+
+  /// No description provided for @selectedDevicesDeleted.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} devices deleted.'**
+  String selectedDevicesDeleted(int count);
 }
 
 class _AppLocalizationsDelegate
