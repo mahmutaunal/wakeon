@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wakeon</string>
+    <string name="widget_description">Kayıtlı bir bilgisayarı ana ekrandan doğrudan uyandır.</string>
+    <string name="widget_empty_title">Wakeon</string>
+    <string name="widget_empty_subtitle">Bu widget ile uyandırmak için kayıtlı bir cihaz seç.</string>
+    <string name="widget_open_app">Wakeon’u Aç</string>
+    <string name="widget_wake_action">Uyandır</string>
+    <string name="widget_device_detail">%1$s</string>
+    <string name="widget_device_missing">Seçili cihaz artık mevcut değil.</string>
+    <string name="widget_wake_sent">%1$s için uyandırma paketi gönderildi.</string>
+    <string name="widget_wake_failed">Uyandırma paketi gönderilemedi.</string>
+    <string name="widget_config_title">Cihaz Seç</string>
+    <string name="widget_config_subtitle">Bu widget için kayıtlı bir cihaz seç.</string>
+    <string name="widget_config_empty">Henüz kayıtlı cihaz yok. Önce Wakeon’u açıp bir bilgisayar ekle.</string>
+    <string name="widget_config_device_row">%1$s\n%2$s • %3$s:%4$d</string>
+    <string name="widget_config_save">Widget’ı Kaydet</string>
+</resources>

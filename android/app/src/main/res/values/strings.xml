@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Wakeon</string>
+    <string name="widget_description">Wake a saved computer directly from your home screen.</string>
+    <string name="widget_empty_title">Wakeon</string>
+    <string name="widget_empty_subtitle">Select a saved device to wake it from this widget.</string>
+    <string name="widget_open_app">Open Wakeon</string>
+    <string name="widget_wake_action">Wake</string>
+    <string name="widget_device_detail">%1$s</string>
+    <string name="widget_device_missing">Selected device is no longer available.</string>
+    <string name="widget_wake_sent">Wake packet sent to %1$s.</string>
+    <string name="widget_wake_failed">Wake packet could not be sent.</string>
+    <string name="widget_config_title">Choose device</string>
+    <string name="widget_config_subtitle">Select one saved device for this widget.</string>
+    <string name="widget_config_empty">No saved devices yet. Open Wakeon and add a computer first.</string>
+    <string name="widget_config_device_row">%1$s\n%2$s • %3$s:%4$d</string>
+    <string name="widget_config_save">Save widget</string>
+</resources>

@@ -6,6 +6,7 @@ import '../../share/data/device_share_file_service.dart';
 import '../../share/data/device_share_manager.dart';
 import '../../share/data/device_share_service.dart';
 import '../../share/data/shared_device_mapper.dart';
+import '../../widgets/data/widget_device_sync_service.dart';
 import '../data/device_backup_service.dart';
 import '../data/network_scan_service.dart';
 import '../data/wake_device_repository.dart';
@@ -66,6 +67,10 @@ final deviceShareServiceProvider = Provider<DeviceShareService>((ref) {
   return DeviceShareService();
 });
 
+final widgetDeviceSyncServiceProvider = Provider<WidgetDeviceSyncService>((ref) {
+  return const WidgetDeviceSyncService();
+});
+
 final deviceShareManagerProvider = Provider<DeviceShareManager>((ref) {
   return DeviceShareManager(
     shareService: ref.watch(deviceShareServiceProvider),
@@ -79,18 +84,23 @@ class DevicesController extends AsyncNotifier<DevicesUiState> {
   late final WakeDeviceRepository _repository;
   late final WakeOnLanService _wakeOnLanService;
   late final DeviceBackupService _backupService;
+  late final WidgetDeviceSyncService _widgetDeviceSyncService;
 
   @override
   Future<DevicesUiState> build() async {
     _repository = ref.watch(wakeDeviceRepositoryProvider);
     _wakeOnLanService = ref.watch(wakeOnLanServiceProvider);
     _backupService = ref.watch(deviceBackupServiceProvider);
+    _widgetDeviceSyncService = ref.watch(widgetDeviceSyncServiceProvider);
 
     final devices = await _repository.getDevices();
     final sortType = await _repository.getSortType();
 
+    final sortedDevices = _sortDevices(devices, sortType);
+    await _widgetDeviceSyncService.syncDevices(sortedDevices);
+
     return DevicesUiState(
-      devices: _sortDevices(devices, sortType),
+      devices: sortedDevices,
       sortType: sortType,
     );
   }
@@ -230,6 +240,7 @@ class DevicesController extends AsyncNotifier<DevicesUiState> {
     );
 
     await _repository.saveDevices(sortedDevices);
+    await _widgetDeviceSyncService.syncDevices(sortedDevices);
   }
 
   Future<void> refreshDeviceStatuses() async {
