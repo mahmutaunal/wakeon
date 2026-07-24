@@ -1,13 +1,29 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wakeon/l10n/app_localizations.dart';
 
 import '../core/theme/app_theme.dart';
+import '../core/play/play_providers.dart';
 import '../features/devices/presentation/devices_screen.dart';
 
 /// Root application widget responsible for configuring themes,
 /// localization, and the initial navigation entry point.
-class WakeonApp extends StatelessWidget {
+class WakeonApp extends ConsumerStatefulWidget {
   const WakeonApp({super.key});
+
+  @override
+  ConsumerState<WakeonApp> createState() => _WakeonAppState();
+}
+
+class _WakeonAppState extends ConsumerState<WakeonApp> {
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(() async {
+      await ref.read(playReviewServiceProvider).recordSession();
+      await ref.read(playUpdateServiceProvider).checkForUpdate();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

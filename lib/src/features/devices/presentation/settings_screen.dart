@@ -3,6 +3,9 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:wakeon/l10n/app_localizations.dart';
 import 'package:flutter/services.dart';
 
+import '../../../core/play/play_providers.dart';
+import '../../../core/play/play_update_service.dart';
+
 import 'device_form_screen.dart';
 import 'devices_controller.dart';
 import 'remote_wake_guide_screen.dart';
@@ -12,7 +15,7 @@ class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   static const _githubUrl = 'github.com/mahmutaunal/wakeon';
-  static const _appVersion = '1.0.0';
+  static const _appVersion = '1.2.0';
   static const _studioName = 'AlpWare Studio';
 
   @override
@@ -68,6 +71,34 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () => _importSharedDevice(context, ref),
             ),
             const SizedBox(height: 24),
+            _SectionTitle(
+              title: Localizations.localeOf(context).languageCode == 'tr'
+                  ? 'Destek ve güncellemeler'
+                  : 'Support & updates',
+            ),
+            const SizedBox(height: 8),
+            _SettingsTile(
+              icon: Icons.star_rate_rounded,
+              title: Localizations.localeOf(context).languageCode == 'tr'
+                  ? 'Wakeon’u değerlendir'
+                  : 'Rate Wakeon',
+              subtitle: Localizations.localeOf(context).languageCode == 'tr'
+                  ? 'Google Play değerlendirme ekranını uygulamadan çıkmadan aç.'
+                  : 'Open the Google Play review flow without leaving the app.',
+              onTap: () => ref.read(playReviewServiceProvider).requestManually(),
+            ),
+            const SizedBox(height: 12),
+            _SettingsTile(
+              icon: Icons.system_update_rounded,
+              title: Localizations.localeOf(context).languageCode == 'tr'
+                  ? 'Güncellemeleri kontrol et'
+                  : 'Check for updates',
+              subtitle: Localizations.localeOf(context).languageCode == 'tr'
+                  ? 'Google Play’de yeni bir Wakeon sürümü olup olmadığını kontrol et.'
+                  : 'Check Google Play for a newer Wakeon version.',
+              onTap: () => _checkForUpdates(context, ref),
+            ),
+            const SizedBox(height: 24),
             _SectionTitle(title: l10n.trustPrivacy),
             const SizedBox(height: 8),
             const _PrivacyHighlightsCard(),
@@ -101,6 +132,35 @@ class SettingsScreen extends ConsumerWidget {
         ),
       ),
     );
+  }
+
+
+  Future<void> _checkForUpdates(BuildContext context, WidgetRef ref) async {
+    final isTurkish = Localizations.localeOf(context).languageCode == 'tr';
+    final messenger = ScaffoldMessenger.of(context);
+    final result = await ref
+        .read(playUpdateServiceProvider)
+        .checkForUpdate(userInitiated: true);
+    if (!context.mounted) return;
+
+    final message = switch (result) {
+      PlayUpdateResult.upToDate => isTurkish
+          ? 'Wakeon güncel.'
+          : 'Wakeon is up to date.',
+      PlayUpdateResult.updateStarted => isTurkish
+          ? 'Güncelleme başlatıldı.'
+          : 'Update started.',
+      PlayUpdateResult.updateDownloaded => isTurkish
+          ? 'Güncelleme indirildi ve uygulanıyor.'
+          : 'The update was downloaded and is being applied.',
+      PlayUpdateResult.unavailable => isTurkish
+          ? 'Bu cihazda Google Play güncelleme akışı kullanılamıyor.'
+          : 'Google Play updates are unavailable on this device.',
+      PlayUpdateResult.failed => isTurkish
+          ? 'Güncelleme kontrolü tamamlanamadı. Lütfen daha sonra tekrar deneyin.'
+          : 'Could not check for updates. Please try again later.',
+    };
+    messenger.showSnackBar(SnackBar(content: Text(message)));
   }
 
   /// Exports the current device list and reports the result to the user.

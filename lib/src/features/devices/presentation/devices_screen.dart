@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/services.dart';
 
+import '../../../core/play/play_providers.dart';
+
 import '../domain/wake_device_type.dart';
 import '../domain/wake_device.dart';
 import '../domain/device_sort_type.dart';
@@ -93,8 +95,11 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
   void initState() {
     super.initState();
 
-    Future.microtask(() {
-      ref.read(devicesControllerProvider.notifier).refreshDeviceStatuses();
+    Future.microtask(() async {
+      await ref.read(devicesControllerProvider.notifier).refreshDeviceStatuses();
+      final count =
+          ref.read(devicesControllerProvider).valueOrNull?.devices.length ?? 0;
+      await ref.read(playReviewServiceProvider).recordConfiguredDeviceCount(count);
     });
   }
 
@@ -397,6 +402,13 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text(l10n.wakePacketSent(device.name))));
+
+      // Keep eligibility grounded in real, successful product value.
+      final configuredDeviceCount =
+          ref.read(devicesControllerProvider).valueOrNull?.devices.length ?? 0;
+      final reviewService = ref.read(playReviewServiceProvider);
+      await reviewService.recordConfiguredDeviceCount(configuredDeviceCount);
+      await reviewService.recordSuccessfulWakeAndRequestIfEligible();
     } catch (error) {
       if (!context.mounted) return;
 

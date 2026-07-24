@@ -176,6 +176,14 @@ Planned:
 - Material 3
 - Cryptography Package
 
+## Google Play Experience
+
+The Android build supports native Google Play in-app reviews and in-app
+updates. Automatic review prompts are intentionally conservative: Wakeon waits
+until the user has configured a device, completed at least three successful
+wake operations, used the app in multiple sessions, and passed a minimum
+installation age. Eligibility counters remain local on the device.
+
 ## Privacy Policy
 
 Wakeon does not collect, transmit, or store personal information.
