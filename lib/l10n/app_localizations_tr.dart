@@ -660,4 +660,63 @@ class AppLocalizationsTr extends AppLocalizations {
   String selectedDevicesDeleted(int count) {
     return '$count cihaz silindi.';
   }
+
+  @override
+  String get appLanguage => 'Uygulama dili';
+
+  @override
+  String get appTheme => 'Uygulama teması';
+
+  @override
+  String get systemDefault => 'Sistem varsayılanı';
+
+  @override
+  String get english => 'İngilizce';
+
+  @override
+  String get turkish => 'Türkçe';
+
+  @override
+  String get lightTheme => 'Açık';
+
+  @override
+  String get darkTheme => 'Koyu';
+
+  @override
+  String get supportAndUpdates => 'Destek ve güncellemeler';
+
+  @override
+  String get rateWakeon => 'Wakeon’u değerlendir';
+
+  @override
+  String get rateWakeonDescription =>
+      'Wakeon’dan ayrılmadan Play Store veya App Store değerlendirme ekranını aç.';
+
+  @override
+  String get reviewUnavailable =>
+      'Uygulama içi değerlendirme ekranı şu anda kullanılamıyor.';
+
+  @override
+  String get checkForUpdates => 'Güncellemeleri kontrol et';
+
+  @override
+  String get checkForUpdatesDescription =>
+      'Play Store veya App Store’da yeni bir Wakeon sürümü olup olmadığını kontrol et.';
+
+  @override
+  String get appIsUpToDate => 'Wakeon güncel.';
+
+  @override
+  String get updateStarted => 'Mağaza güncelleme ekranı açıldı.';
+
+  @override
+  String get updateDownloaded => 'Güncelleme indirildi ve uygulanıyor.';
+
+  @override
+  String get updateUnavailable =>
+      'Bu kurulum için mağaza güncellemeleri henüz kullanılamıyor.';
+
+  @override
+  String get updateCheckFailed =>
+      'Güncellemeler kontrol edilemedi. Lütfen daha sonra tekrar dene.';
 }

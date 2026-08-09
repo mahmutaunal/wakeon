@@ -4,6 +4,7 @@ import 'package:wakeon/l10n/app_localizations.dart';
 
 import '../core/theme/app_theme.dart';
 import '../core/play/play_providers.dart';
+import '../core/settings/app_settings.dart';
 import '../features/devices/presentation/devices_screen.dart';
 
 /// Root application widget responsible for configuring themes,
@@ -27,15 +28,18 @@ class _WakeonAppState extends ConsumerState<WakeonApp> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = ref.watch(appSettingsProvider);
+
     // Configure global application settings and visual appearance.
     return MaterialApp(
       onGenerateTitle: (context) => AppLocalizations.of(context)!.appName,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
+      locale: settings.locale,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light(),
       darkTheme: AppTheme.dark(),
-      themeMode: ThemeMode.system,
+      themeMode: settings.themeMode,
       home: const DevicesScreen(),
     );
   }

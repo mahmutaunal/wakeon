@@ -112,7 +112,8 @@ enum WakeOnLanSender {
         let port = NWEndpoint.Port(rawValue: UInt16(device.port)) ?? NWEndpoint.Port(rawValue: 9)!
         let connection = NWConnection(host: host, port: port, using: .udp)
 
-        try await withCheckedThrowingContinuation { continuation in
+        try await withCheckedThrowingContinuation {
+            (continuation: CheckedContinuation<Void, Error>) in
             var didResume = false
 
             func finish(_ result: Result<Void, Error>) {

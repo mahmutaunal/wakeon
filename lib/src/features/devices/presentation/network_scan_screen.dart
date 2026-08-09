@@ -72,7 +72,7 @@ class _NetworkScanScreenState extends ConsumerState<NetworkScanScreen> {
             return ListView.separated(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
               itemCount: devices.length + 1,
-              separatorBuilder: (_, __) => const SizedBox(height: 12),
+              separatorBuilder: (_, _) => const SizedBox(height: 12),
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return _ScanResultHeader(

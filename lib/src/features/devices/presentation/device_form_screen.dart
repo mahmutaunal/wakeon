@@ -147,7 +147,7 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
               ),
               const SizedBox(height: 16),
               DropdownButtonFormField<WakeDeviceType>(
-                value: _selectedType,
+                initialValue: _selectedType,
                 decoration: InputDecoration(
                   labelText: l10n.deviceType,
                   prefixIcon: const Icon(Icons.category_rounded),
@@ -386,7 +386,7 @@ class _BottomSaveBar extends StatelessWidget {
           ),
           boxShadow: [
             BoxShadow(
-              color: theme.colorScheme.shadow.withOpacity(0.08),
+              color: theme.colorScheme.shadow.withValues(alpha: 0.08),
               blurRadius: 16,
               offset: const Offset(0, -4),
             ),

@@ -1,13 +1,17 @@
 # Changelog
 
-## 1.2.0 - Google Play Experience
+## 1.2.0 - Store Experience and Personalization
 
 ### Added
 
-- Native Google Play in-app review flow
+- Native Google Play and App Store in-app review flows
 - Automatic review prompt after meaningful Wake-on-LAN usage
 - Google Play flexible and immediate in-app update flows
+- App Store version discovery and in-app StoreKit product page
 - Manual review and update actions in Settings
+- Persistent system, English, and Turkish language choices
+- Persistent system, light, and dark theme choices
+- Runtime app version display sourced from platform metadata
 - Local-only review eligibility policy with cooldown and attempt limits
 - Unit tests for the review prompt policy
 

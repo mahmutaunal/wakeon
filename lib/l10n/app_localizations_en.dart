@@ -659,4 +659,64 @@ class AppLocalizationsEn extends AppLocalizations {
   String selectedDevicesDeleted(int count) {
     return '$count devices deleted.';
   }
+
+  @override
+  String get appLanguage => 'App language';
+
+  @override
+  String get appTheme => 'App theme';
+
+  @override
+  String get systemDefault => 'System default';
+
+  @override
+  String get english => 'English';
+
+  @override
+  String get turkish => 'Turkish';
+
+  @override
+  String get lightTheme => 'Light';
+
+  @override
+  String get darkTheme => 'Dark';
+
+  @override
+  String get supportAndUpdates => 'Support & updates';
+
+  @override
+  String get rateWakeon => 'Rate Wakeon';
+
+  @override
+  String get rateWakeonDescription =>
+      'Open the native Play Store or App Store rating sheet without leaving Wakeon.';
+
+  @override
+  String get reviewUnavailable =>
+      'The in-app rating sheet is unavailable right now.';
+
+  @override
+  String get checkForUpdates => 'Check for updates';
+
+  @override
+  String get checkForUpdatesDescription =>
+      'Check the Play Store or App Store for a newer Wakeon version.';
+
+  @override
+  String get appIsUpToDate => 'Wakeon is up to date.';
+
+  @override
+  String get updateStarted => 'The store update screen is open.';
+
+  @override
+  String get updateDownloaded =>
+      'The update was downloaded and is being applied.';
+
+  @override
+  String get updateUnavailable =>
+      'Store updates are not available for this installation yet.';
+
+  @override
+  String get updateCheckFailed =>
+      'Could not check for updates. Please try again later.';
 }

@@ -11,6 +11,10 @@ class SceneDelegate: FlutterSceneDelegate {
 
     if let controller = window?.rootViewController as? FlutterViewController {
       WidgetChannelRegistrar.register(binaryMessenger: controller.binaryMessenger)
+      AppStoreChannelRegistrar.register(
+        binaryMessenger: controller.binaryMessenger,
+        presenter: controller
+      )
     }
   }
 }

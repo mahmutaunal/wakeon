@@ -1,4 +1,3 @@
-
 import 'package:flutter_test/flutter_test.dart';
 import 'package:wakeon/src/core/play/review_prompt_policy.dart';
 
@@ -6,12 +5,12 @@ void main() {
   const policy = ReviewPromptPolicy();
 
   ReviewPromptSnapshot eligibleSnapshot(DateTime now) => ReviewPromptSnapshot(
-        firstUseAt: now.subtract(const Duration(days: 3)),
-        sessionCount: 2,
-        successfulWakeCount: 3,
-        configuredDeviceCount: 1,
-        promptAttemptCount: 0,
-      );
+    firstUseAt: now.subtract(const Duration(days: 3)),
+    sessionCount: 2,
+    successfulWakeCount: 3,
+    configuredDeviceCount: 1,
+    promptAttemptCount: 0,
+  );
 
   test('allows a proven user after meaningful Wake-on-LAN usage', () {
     final now = DateTime(2026, 7, 24);

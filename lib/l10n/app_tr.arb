@@ -273,5 +273,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "appLanguage": "Uygulama dili",
+  "appTheme": "Uygulama teması",
+  "systemDefault": "Sistem varsayılanı",
+  "english": "İngilizce",
+  "turkish": "Türkçe",
+  "lightTheme": "Açık",
+  "darkTheme": "Koyu",
+  "supportAndUpdates": "Destek ve güncellemeler",
+  "rateWakeon": "Wakeon’u değerlendir",
+  "rateWakeonDescription": "Wakeon’dan ayrılmadan Play Store veya App Store değerlendirme ekranını aç.",
+  "reviewUnavailable": "Uygulama içi değerlendirme ekranı şu anda kullanılamıyor.",
+  "checkForUpdates": "Güncellemeleri kontrol et",
+  "checkForUpdatesDescription": "Play Store veya App Store’da yeni bir Wakeon sürümü olup olmadığını kontrol et.",
+  "appIsUpToDate": "Wakeon güncel.",
+  "updateStarted": "Mağaza güncelleme ekranı açıldı.",
+  "updateDownloaded": "Güncelleme indirildi ve uygulanıyor.",
+  "updateUnavailable": "Bu kurulum için mağaza güncellemeleri henüz kullanılamıyor.",
+  "updateCheckFailed": "Güncellemeler kontrol edilemedi. Lütfen daha sonra tekrar dene."
 }

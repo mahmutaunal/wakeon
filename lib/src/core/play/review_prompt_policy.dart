@@ -1,4 +1,3 @@
-
 class ReviewPromptSnapshot {
   const ReviewPromptSnapshot({
     required this.firstUseAt,
@@ -41,7 +40,9 @@ class ReviewPromptPolicy {
     if (snapshot.successfulWakeCount < minimumSuccessfulWakes) return false;
     if (snapshot.configuredDeviceCount < minimumConfiguredDevices) return false;
     final lastAttempt = snapshot.lastPromptAttemptAt;
-    if (lastAttempt != null && now.difference(lastAttempt) < cooldown) return false;
+    if (lastAttempt != null && now.difference(lastAttempt) < cooldown) {
+      return false;
+    }
     return true;
   }
 }

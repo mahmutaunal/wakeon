@@ -1249,6 +1249,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count} devices deleted.'**
   String selectedDevicesDeleted(int count);
+
+  /// No description provided for @appLanguage.
+  ///
+  /// In en, this message translates to:
+  /// **'App language'**
+  String get appLanguage;
+
+  /// No description provided for @appTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'App theme'**
+  String get appTheme;
+
+  /// No description provided for @systemDefault.
+  ///
+  /// In en, this message translates to:
+  /// **'System default'**
+  String get systemDefault;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @turkish.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish'**
+  String get turkish;
+
+  /// No description provided for @lightTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Light'**
+  String get lightTheme;
+
+  /// No description provided for @darkTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark'**
+  String get darkTheme;
+
+  /// No description provided for @supportAndUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Support & updates'**
+  String get supportAndUpdates;
+
+  /// No description provided for @rateWakeon.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate Wakeon'**
+  String get rateWakeon;
+
+  /// No description provided for @rateWakeonDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Open the native Play Store or App Store rating sheet without leaving Wakeon.'**
+  String get rateWakeonDescription;
+
+  /// No description provided for @reviewUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'The in-app rating sheet is unavailable right now.'**
+  String get reviewUnavailable;
+
+  /// No description provided for @checkForUpdates.
+  ///
+  /// In en, this message translates to:
+  /// **'Check for updates'**
+  String get checkForUpdates;
+
+  /// No description provided for @checkForUpdatesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Check the Play Store or App Store for a newer Wakeon version.'**
+  String get checkForUpdatesDescription;
+
+  /// No description provided for @appIsUpToDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Wakeon is up to date.'**
+  String get appIsUpToDate;
+
+  /// No description provided for @updateStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'The store update screen is open.'**
+  String get updateStarted;
+
+  /// No description provided for @updateDownloaded.
+  ///
+  /// In en, this message translates to:
+  /// **'The update was downloaded and is being applied.'**
+  String get updateDownloaded;
+
+  /// No description provided for @updateUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Store updates are not available for this installation yet.'**
+  String get updateUnavailable;
+
+  /// No description provided for @updateCheckFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not check for updates. Please try again later.'**
+  String get updateCheckFailed;
 }
 
 class _AppLocalizationsDelegate

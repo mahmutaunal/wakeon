@@ -29,10 +29,24 @@ Designed with simplicity in mind, Wakeon focuses on reliability, privacy, and a 
 ### User Experience
 
 - Material 3 design
-- Light theme support
-- Dark theme support
+- Persistent system, light, and dark theme choices
+- Persistent system, English, and Turkish language choices
 - Responsive layout
 - Beginner-friendly setup flow
+
+### Store Experience
+
+- Automatic update checks at most once every 24 hours
+- Manual update checks from Settings
+- Google Play flexible and immediate in-app update flows
+- App Store version discovery by bundle ID after the iOS release is published
+- In-app App Store product page, so iOS users stay inside Wakeon while updating
+- Native Play Store and App Store rating sheets
+- Usage-based review prompts only after meaningful successful wake actions
+
+The store integrations do not require a private API, Firebase, analytics, or a
+remote configuration service. Android uses Google Play Core. iOS looks up the
+public App Store record for `com.alpwarestudio.wakeon` and uses StoreKit.
 
 ### 🔒 Secure Device Sharing
 

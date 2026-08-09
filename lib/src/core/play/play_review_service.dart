@@ -1,4 +1,3 @@
-
 import 'package:in_app_review/in_app_review.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,7 +30,9 @@ class PlayReviewService {
       preferences.getString(_firstUseAtKey) ?? now.toIso8601String(),
     );
 
-    final last = DateTime.tryParse(preferences.getString(_lastSessionAtKey) ?? '');
+    final last = DateTime.tryParse(
+      preferences.getString(_lastSessionAtKey) ?? '',
+    );
     if (last == null || now.difference(last) >= _sessionGap) {
       await preferences.setInt(
         _sessionCountKey,
@@ -58,9 +59,8 @@ class PlayReviewService {
   Future<bool> requestAutomaticallyIfEligible() async {
     final preferences = await SharedPreferences.getInstance();
     final now = DateTime.now();
-    final firstUse = DateTime.tryParse(
-      preferences.getString(_firstUseAtKey) ?? '',
-    ) ?? now;
+    final firstUse =
+        DateTime.tryParse(preferences.getString(_firstUseAtKey) ?? '') ?? now;
     final lastAttempt = DateTime.tryParse(
       preferences.getString(_lastPromptAttemptAtKey) ?? '',
     );
@@ -69,12 +69,10 @@ class PlayReviewService {
       ReviewPromptSnapshot(
         firstUseAt: firstUse,
         sessionCount: preferences.getInt(_sessionCountKey) ?? 0,
-        successfulWakeCount:
-            preferences.getInt(_successfulWakeCountKey) ?? 0,
+        successfulWakeCount: preferences.getInt(_successfulWakeCountKey) ?? 0,
         configuredDeviceCount:
             preferences.getInt(_configuredDeviceCountKey) ?? 0,
-        promptAttemptCount:
-            preferences.getInt(_promptAttemptCountKey) ?? 0,
+        promptAttemptCount: preferences.getInt(_promptAttemptCountKey) ?? 0,
         lastPromptAttemptAt: lastAttempt,
       ),
       now,
@@ -85,21 +83,22 @@ class PlayReviewService {
       _promptAttemptCountKey,
       (preferences.getInt(_promptAttemptCountKey) ?? 0) + 1,
     );
-    await preferences.setString(
-      _lastPromptAttemptAtKey,
-      now.toIso8601String(),
-    );
+    await preferences.setString(_lastPromptAttemptAtKey, now.toIso8601String());
     await _inAppReview.requestReview();
     return true;
   }
 
-  Future<void> requestManually() async {
-    if (await _inAppReview.isAvailable()) {
+  /// Requests the native, in-app rating sheet on both Android and iOS.
+  ///
+  /// Store quotas decide whether the sheet is actually displayed, so the
+  /// settings screen reports only whether the request could be submitted.
+  Future<bool> requestManually() async {
+    try {
+      if (!await _inAppReview.isAvailable()) return false;
       await _inAppReview.requestReview();
-    } else {
-      await _inAppReview.openStoreListing(
-        appStoreId: 'com.alpwarestudio.wakeon',
-      );
+      return true;
+    } catch (_) {
+      return false;
     }
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../../../core/play/play_providers.dart';
 import '../../../core/play/play_update_service.dart';
+import '../../../core/settings/app_settings.dart';
 
 import 'device_form_screen.dart';
 import 'devices_controller.dart';
@@ -15,12 +16,13 @@ class SettingsScreen extends ConsumerWidget {
   const SettingsScreen({super.key});
 
   static const _githubUrl = 'github.com/mahmutaunal/wakeon';
-  static const _appVersion = '1.2.0';
   static const _studioName = 'AlpWare Studio';
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
+    final settings = ref.watch(appSettingsProvider);
+    final appVersion = ref.watch(appVersionProvider).valueOrNull ?? '—';
 
     return Scaffold(
       appBar: AppBar(title: Text(l10n.settings)),
@@ -28,13 +30,24 @@ class SettingsScreen extends ConsumerWidget {
         child: ListView(
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
-            const _AppHeaderCard(
-              appVersion: _appVersion,
-              studioName: _studioName,
-            ),
+            _AppHeaderCard(appVersion: appVersion, studioName: _studioName),
             const SizedBox(height: 24),
             _SectionTitle(title: l10n.general),
             const SizedBox(height: 8),
+            _SettingsTile(
+              icon: Icons.language_rounded,
+              title: l10n.appLanguage,
+              subtitle: _languageLabel(l10n, settings.language),
+              onTap: () => _selectLanguage(context, ref, settings.language),
+            ),
+            const SizedBox(height: 12),
+            _SettingsTile(
+              icon: Icons.palette_rounded,
+              title: l10n.appTheme,
+              subtitle: _themeLabel(l10n, settings.themeMode),
+              onTap: () => _selectTheme(context, ref, settings.themeMode),
+            ),
+            const SizedBox(height: 12),
             _SettingsTile(
               icon: Icons.public_rounded,
               title: l10n.remoteWakeGuide,
@@ -71,31 +84,19 @@ class SettingsScreen extends ConsumerWidget {
               onTap: () => _importSharedDevice(context, ref),
             ),
             const SizedBox(height: 24),
-            _SectionTitle(
-              title: Localizations.localeOf(context).languageCode == 'tr'
-                  ? 'Destek ve güncellemeler'
-                  : 'Support & updates',
-            ),
+            _SectionTitle(title: l10n.supportAndUpdates),
             const SizedBox(height: 8),
             _SettingsTile(
               icon: Icons.star_rate_rounded,
-              title: Localizations.localeOf(context).languageCode == 'tr'
-                  ? 'Wakeon’u değerlendir'
-                  : 'Rate Wakeon',
-              subtitle: Localizations.localeOf(context).languageCode == 'tr'
-                  ? 'Google Play değerlendirme ekranını uygulamadan çıkmadan aç.'
-                  : 'Open the Google Play review flow without leaving the app.',
-              onTap: () => ref.read(playReviewServiceProvider).requestManually(),
+              title: l10n.rateWakeon,
+              subtitle: l10n.rateWakeonDescription,
+              onTap: () => _requestReview(context, ref),
             ),
             const SizedBox(height: 12),
             _SettingsTile(
               icon: Icons.system_update_rounded,
-              title: Localizations.localeOf(context).languageCode == 'tr'
-                  ? 'Güncellemeleri kontrol et'
-                  : 'Check for updates',
-              subtitle: Localizations.localeOf(context).languageCode == 'tr'
-                  ? 'Google Play’de yeni bir Wakeon sürümü olup olmadığını kontrol et.'
-                  : 'Check Google Play for a newer Wakeon version.',
+              title: l10n.checkForUpdates,
+              subtitle: l10n.checkForUpdatesDescription,
               onTap: () => _checkForUpdates(context, ref),
             ),
             const SizedBox(height: 24),
@@ -109,7 +110,7 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             const _BrandCard(studioName: _studioName),
             const SizedBox(height: 12),
-            const _VersionCard(appVersion: _appVersion),
+            _VersionCard(appVersion: appVersion),
             const SizedBox(height: 12),
             _SettingsTile(
               icon: Icons.article_rounded,
@@ -119,7 +120,7 @@ class SettingsScreen extends ConsumerWidget {
                 showLicensePage(
                   context: context,
                   applicationName: l10n.appName,
-                  applicationVersion: _appVersion,
+                  applicationVersion: appVersion,
                   applicationLegalese: '© 2026 $_studioName',
                 );
               },
@@ -134,9 +135,107 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
+  String _languageLabel(AppLocalizations l10n, AppLanguage language) {
+    return switch (language) {
+      AppLanguage.system => l10n.systemDefault,
+      AppLanguage.english => l10n.english,
+      AppLanguage.turkish => l10n.turkish,
+    };
+  }
+
+  String _themeLabel(AppLocalizations l10n, ThemeMode mode) {
+    return switch (mode) {
+      ThemeMode.system => l10n.systemDefault,
+      ThemeMode.light => l10n.lightTheme,
+      ThemeMode.dark => l10n.darkTheme,
+    };
+  }
+
+  Future<void> _selectLanguage(
+    BuildContext context,
+    WidgetRef ref,
+    AppLanguage current,
+  ) async {
+    final selected = await showModalBottomSheet<AppLanguage>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(title: Text(l10n.appLanguage)),
+              for (final language in AppLanguage.values)
+                ListTile(
+                  leading: Icon(
+                    language == current
+                        ? Icons.radio_button_checked_rounded
+                        : Icons.radio_button_unchecked_rounded,
+                  ),
+                  title: Text(_languageLabel(l10n, language)),
+                  onTap: () => Navigator.of(context).pop(language),
+                ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
+    );
+    if (selected != null) {
+      await ref.read(appSettingsProvider.notifier).setLanguage(selected);
+    }
+  }
+
+  Future<void> _selectTheme(
+    BuildContext context,
+    WidgetRef ref,
+    ThemeMode current,
+  ) async {
+    final selected = await showModalBottomSheet<ThemeMode>(
+      context: context,
+      showDragHandle: true,
+      builder: (context) {
+        final l10n = AppLocalizations.of(context)!;
+        return SafeArea(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              ListTile(title: Text(l10n.appTheme)),
+              for (final mode in ThemeMode.values)
+                ListTile(
+                  leading: Icon(
+                    mode == current
+                        ? Icons.radio_button_checked_rounded
+                        : Icons.radio_button_unchecked_rounded,
+                  ),
+                  title: Text(_themeLabel(l10n, mode)),
+                  onTap: () => Navigator.of(context).pop(mode),
+                ),
+              const SizedBox(height: 12),
+            ],
+          ),
+        );
+      },
+    );
+    if (selected != null) {
+      await ref.read(appSettingsProvider.notifier).setThemeMode(selected);
+    }
+  }
+
+  Future<void> _requestReview(BuildContext context, WidgetRef ref) async {
+    final messenger = ScaffoldMessenger.of(context);
+    final available = await ref
+        .read(playReviewServiceProvider)
+        .requestManually();
+    if (!context.mounted || available) return;
+    messenger.showSnackBar(
+      SnackBar(content: Text(AppLocalizations.of(context)!.reviewUnavailable)),
+    );
+  }
 
   Future<void> _checkForUpdates(BuildContext context, WidgetRef ref) async {
-    final isTurkish = Localizations.localeOf(context).languageCode == 'tr';
+    final l10n = AppLocalizations.of(context)!;
     final messenger = ScaffoldMessenger.of(context);
     final result = await ref
         .read(playUpdateServiceProvider)
@@ -144,21 +243,11 @@ class SettingsScreen extends ConsumerWidget {
     if (!context.mounted) return;
 
     final message = switch (result) {
-      PlayUpdateResult.upToDate => isTurkish
-          ? 'Wakeon güncel.'
-          : 'Wakeon is up to date.',
-      PlayUpdateResult.updateStarted => isTurkish
-          ? 'Güncelleme başlatıldı.'
-          : 'Update started.',
-      PlayUpdateResult.updateDownloaded => isTurkish
-          ? 'Güncelleme indirildi ve uygulanıyor.'
-          : 'The update was downloaded and is being applied.',
-      PlayUpdateResult.unavailable => isTurkish
-          ? 'Bu cihazda Google Play güncelleme akışı kullanılamıyor.'
-          : 'Google Play updates are unavailable on this device.',
-      PlayUpdateResult.failed => isTurkish
-          ? 'Güncelleme kontrolü tamamlanamadı. Lütfen daha sonra tekrar deneyin.'
-          : 'Could not check for updates. Please try again later.',
+      PlayUpdateResult.upToDate => l10n.appIsUpToDate,
+      PlayUpdateResult.updateStarted => l10n.updateStarted,
+      PlayUpdateResult.updateDownloaded => l10n.updateDownloaded,
+      PlayUpdateResult.unavailable => l10n.updateUnavailable,
+      PlayUpdateResult.failed => l10n.updateCheckFailed,
     };
     messenger.showSnackBar(SnackBar(content: Text(message)));
   }

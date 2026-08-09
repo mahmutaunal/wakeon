@@ -273,5 +273,23 @@
         "type": "int"
       }
     }
-  }
+  },
+  "appLanguage": "App language",
+  "appTheme": "App theme",
+  "systemDefault": "System default",
+  "english": "English",
+  "turkish": "Turkish",
+  "lightTheme": "Light",
+  "darkTheme": "Dark",
+  "supportAndUpdates": "Support & updates",
+  "rateWakeon": "Rate Wakeon",
+  "rateWakeonDescription": "Open the native Play Store or App Store rating sheet without leaving Wakeon.",
+  "reviewUnavailable": "The in-app rating sheet is unavailable right now.",
+  "checkForUpdates": "Check for updates",
+  "checkForUpdatesDescription": "Check the Play Store or App Store for a newer Wakeon version.",
+  "appIsUpToDate": "Wakeon is up to date.",
+  "updateStarted": "The store update screen is open.",
+  "updateDownloaded": "The update was downloaded and is being applied.",
+  "updateUnavailable": "Store updates are not available for this installation yet.",
+  "updateCheckFailed": "Could not check for updates. Please try again later."
 }

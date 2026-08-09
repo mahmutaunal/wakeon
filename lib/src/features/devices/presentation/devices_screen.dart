@@ -96,10 +96,14 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
     super.initState();
 
     Future.microtask(() async {
-      await ref.read(devicesControllerProvider.notifier).refreshDeviceStatuses();
+      await ref
+          .read(devicesControllerProvider.notifier)
+          .refreshDeviceStatuses();
       final count =
           ref.read(devicesControllerProvider).valueOrNull?.devices.length ?? 0;
-      await ref.read(playReviewServiceProvider).recordConfiguredDeviceCount(count);
+      await ref
+          .read(playReviewServiceProvider)
+          .recordConfiguredDeviceCount(count);
     });
   }
 
@@ -282,7 +286,7 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
                       ? filteredDevices.length +
                             (_searchQuery.trim().isEmpty ? 2 : 3)
                       : 2,
-                  separatorBuilder: (_, __) => const SizedBox(height: 12),
+                  separatorBuilder: (_, _) => const SizedBox(height: 12),
                   itemBuilder: (context, index) {
                     if (index == 0) {
                       return Row(
@@ -539,12 +543,13 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
               ),
               const SizedBox(height: 12),
               for (final sortType in DeviceSortType.values)
-                RadioListTile<DeviceSortType>(
-                  value: sortType,
-                  groupValue: currentSortType,
-                  onChanged: (value) {
-                    Navigator.of(context).pop(value);
-                  },
+                ListTile(
+                  leading: Icon(
+                    sortType == currentSortType
+                        ? Icons.radio_button_checked_rounded
+                        : Icons.radio_button_unchecked_rounded,
+                  ),
+                  onTap: () => Navigator.of(context).pop(sortType),
                   title: Text(_sortTypeLabel(context, sortType)),
                 ),
             ],
@@ -664,18 +669,16 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
             const SizedBox(height: 16),
             Text(
               l10n.deleteSelectedDevicesQuestion(count),
-              style: Theme.of(dialogContext).textTheme.titleLarge?.copyWith(
-                fontWeight: FontWeight.w800,
-              ),
+              style: Theme.of(
+                dialogContext,
+              ).textTheme.titleLarge?.copyWith(fontWeight: FontWeight.w800),
               textAlign: TextAlign.center,
             ),
             const SizedBox(height: 12),
             Text(
               l10n.deleteSelectedDevicesDescription,
               style: Theme.of(dialogContext).textTheme.bodyMedium?.copyWith(
-                color: Theme.of(
-                  dialogContext,
-                ).colorScheme.onSurfaceVariant,
+                color: Theme.of(dialogContext).colorScheme.onSurfaceVariant,
               ),
               textAlign: TextAlign.center,
             ),
@@ -700,12 +703,12 @@ class _DevicesScreenState extends ConsumerState<DevicesScreen> {
       ),
     );
 
-    if (shouldDelete != true || !mounted) return;
+    if (shouldDelete != true || !context.mounted) return;
 
     final ids = Set<String>.from(_selectedDeviceIds);
     await ref.read(devicesControllerProvider.notifier).deleteDevices(ids);
 
-    if (!mounted) return;
+    if (!context.mounted) return;
     _clearSelection();
     ScaffoldMessenger.of(
       context,
