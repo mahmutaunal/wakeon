@@ -43,6 +43,8 @@ Designed with simplicity in mind, Wakeon focuses on reliability, privacy, and a 
 - In-app App Store product page, so iOS users stay inside Wakeon while updating
 - Native Play Store and App Store rating sheets
 - Usage-based review prompts only after meaningful successful wake actions
+- Optional lifetime Premium purchase that removes all ads
+- Purchase restoration across devices through the user's store account
 
 The store integrations do not require a private API, Firebase, analytics, or a
 remote configuration service. Android uses Google Play Core. iOS looks up the
@@ -59,9 +61,8 @@ public App Store record for `com.alpwarestudio.wakeon` and uses StoreKit.
 - No account required
 - No sign-in required
 - No cloud dependency
-- No ads
-- No analytics
-- No tracking
+- No device-profile data in ads or analytics
+- Optional one-time ad-free upgrade
 - Local-only device storage
 - Device data remains on your device
 - No user accounts
@@ -189,6 +190,7 @@ Planned:
 - SharedPreferences
 - Material 3
 - Cryptography Package
+- Google Play Billing / StoreKit through `in_app_purchase`
 
 ## Google Play Experience
 
@@ -200,18 +202,26 @@ installation age. Eligibility counters remain local on the device.
 
 ## Privacy Policy
 
-Wakeon does not collect, transmit, or store personal information.
-
-All device information remains on the user's device.
+Wakeon keeps device profiles and local-network scan results on the user's
+device. Advertising, aggregate analytics, and optional store purchase processing
+are described transparently in the policy.
 
 For details, see [Privacy Policy](PRIVACY_POLICY.md).
 
-Wakeon does not use:
+Wakeon never sends device names, MAC addresses, local IP addresses, backup
+contents, or share codes to advertising or analytics services. No Wakeon user
+account is required.
 
-- Analytics services
-- Advertising SDKs
-- Tracking frameworks
-- User accounts
+## Premium development override
+
+To exercise the complete ad-free UI without changing store ownership, run a
+non-release build with:
+
+```bash
+flutter run --dart-define=WAKEON_FORCE_PREMIUM=true
+```
+
+Release builds always ignore this override.
 
 ## Open Source
 

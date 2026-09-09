@@ -10,6 +10,7 @@ import '../domain/wake_device_type.dart';
 import 'devices_controller.dart';
 import 'network_scan_screen.dart';
 import 'mac_address_input_formatter.dart';
+import '../../../core/ads/ad_coordinator.dart';
 
 /// Form screen used to add a new Wake-on-LAN device or edit an existing one.
 class DeviceFormScreen extends ConsumerStatefulWidget {
@@ -362,6 +363,13 @@ class _DeviceFormScreenState extends ConsumerState<DeviceFormScreen> {
     if (!mounted) return;
 
     Navigator.of(context).pop();
+    await ref
+        .read(adCoordinatorProvider)
+        .recordCompletedAction(
+          _isEditing
+              ? CompletedAdAction.deviceUpdated
+              : CompletedAdAction.deviceCreated,
+        );
   }
 }
 

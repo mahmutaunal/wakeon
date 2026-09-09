@@ -1,0 +1,12 @@
+{
+  "conditions": [],
+  "parameters": {
+    "ads_enabled": {"defaultValue": {"value": "true"}, "valueType": "BOOLEAN"},
+    "ad_banner_enabled": {"defaultValue": {"value": "true"}, "valueType": "BOOLEAN"},
+    "ad_interstitial_enabled": {"defaultValue": {"value": "true"}, "valueType": "BOOLEAN"},
+    "ad_actions_before_first_interstitial": {"defaultValue": {"value": "3"}, "valueType": "NUMBER"},
+    "ad_actions_between_interstitials": {"defaultValue": {"value": "3"}, "valueType": "NUMBER"},
+    "ad_minimum_session_seconds": {"defaultValue": {"value": "30"}, "valueType": "NUMBER"},
+    "ad_minimum_interstitial_interval_seconds": {"defaultValue": {"value": "120"}, "valueType": "NUMBER"}
+  }
+}

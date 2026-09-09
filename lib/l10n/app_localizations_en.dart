@@ -206,7 +206,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get noAds => 'No ads';
 
   @override
-  String get noAdsDescription => 'Wakeon does not contain ads.';
+  String get noAdsDescription => 'Premium removes banner and interstitial ads.';
 
   @override
   String get noAccount => 'No account';
@@ -426,7 +426,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacySummaryDescription =>
-      'Wakeon keeps your device configuration on your device and avoids accounts, ads, analytics, and tracking.';
+      'Wakeon keeps your device configuration on your device. Ads and aggregate analytics never include that configuration.';
 
   @override
   String get savedLocally => 'Saved locally';
@@ -440,7 +440,61 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get noTrackingDescription =>
-      'Wakeon does not include analytics or advertising SDKs.';
+      'Device names, MAC addresses, local addresses, backups, and share codes are never sent to ads or analytics.';
+
+  @override
+  String get respectfulAds => 'Optional ad-free upgrade';
+
+  @override
+  String get respectfulAdsDescription =>
+      'The free version is supported by ads; one lifetime Premium purchase removes them.';
+
+  @override
+  String get premium => 'Premium';
+
+  @override
+  String get premiumRemoveAds => 'Remove ads forever';
+
+  @override
+  String get premiumDescription =>
+      'One purchase removes banner and interstitial ads. All other features remain free.';
+
+  @override
+  String get premiumActive =>
+      'Premium is active. Thank you for supporting Wakeon!';
+
+  @override
+  String get premiumActiveTestMode =>
+      'Premium test mode is active. Store purchases are unchanged.';
+
+  @override
+  String get premiumStoreLoading => 'Connecting to the store…';
+
+  @override
+  String get premiumPurchasePending =>
+      'Waiting for the store to complete your purchase…';
+
+  @override
+  String get premiumRestoring => 'Restoring your previous purchase…';
+
+  @override
+  String get premiumStoreUnavailable =>
+      'Premium is currently unavailable. Install a Play-distributed test build and check the product setup.';
+
+  @override
+  String get premiumPurchaseError =>
+      'The store could not complete this request. Please try again.';
+
+  @override
+  String get buyPremium => 'Buy Premium';
+
+  @override
+  String buyPremiumFor(Object price) {
+    return 'Buy Premium · $price';
+  }
+
+  @override
+  String get restorePurchases => 'Restore purchase';
 
   @override
   String get backupControl => 'You control backups';
@@ -719,4 +773,15 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get updateCheckFailed =>
       'Could not check for updates. Please try again later.';
+
+  @override
+  String get adPrivacyChoices => 'Ad privacy choices';
+
+  @override
+  String get adPrivacyChoicesDescription =>
+      'Review or change the consent choices used for personalized advertising.';
+
+  @override
+  String get privacyOptionsUnavailable =>
+      'Ad privacy choices are not required or are temporarily unavailable.';
 }

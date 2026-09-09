@@ -24,6 +24,9 @@
 		<string>????</string>
 		<key>CFBundleVersion</key>
 		<string>$(FLUTTER_BUILD_NUMBER)</string>
+		<!-- Google sample App ID. Replace with the production AdMob App ID. -->
+		<key>GADApplicationIdentifier</key>
+		<string>ca-app-pub-3940256099942544~1458002511</string>
 		<key>LSRequiresIPhoneOS</key>
 		<true/>
 		<key>NSLocalNetworkUsageDescription</key>

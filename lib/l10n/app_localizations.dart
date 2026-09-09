@@ -443,7 +443,7 @@ abstract class AppLocalizations {
   /// No description provided for @noAdsDescription.
   ///
   /// In en, this message translates to:
-  /// **'Wakeon does not contain ads.'**
+  /// **'Premium removes banner and interstitial ads.'**
   String get noAdsDescription;
 
   /// No description provided for @noAccount.
@@ -839,7 +839,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacySummaryDescription.
   ///
   /// In en, this message translates to:
-  /// **'Wakeon keeps your device configuration on your device and avoids accounts, ads, analytics, and tracking.'**
+  /// **'Wakeon keeps your device configuration on your device. Ads and aggregate analytics never include that configuration.'**
   String get privacySummaryDescription;
 
   /// No description provided for @savedLocally.
@@ -863,8 +863,98 @@ abstract class AppLocalizations {
   /// No description provided for @noTrackingDescription.
   ///
   /// In en, this message translates to:
-  /// **'Wakeon does not include analytics or advertising SDKs.'**
+  /// **'Device names, MAC addresses, local addresses, backups, and share codes are never sent to ads or analytics.'**
   String get noTrackingDescription;
+
+  /// No description provided for @respectfulAds.
+  ///
+  /// In en, this message translates to:
+  /// **'Optional ad-free upgrade'**
+  String get respectfulAds;
+
+  /// No description provided for @respectfulAdsDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'The free version is supported by ads; one lifetime Premium purchase removes them.'**
+  String get respectfulAdsDescription;
+
+  /// No description provided for @premium.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium'**
+  String get premium;
+
+  /// No description provided for @premiumRemoveAds.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove ads forever'**
+  String get premiumRemoveAds;
+
+  /// No description provided for @premiumDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'One purchase removes banner and interstitial ads. All other features remain free.'**
+  String get premiumDescription;
+
+  /// No description provided for @premiumActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium is active. Thank you for supporting Wakeon!'**
+  String get premiumActive;
+
+  /// No description provided for @premiumActiveTestMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium test mode is active. Store purchases are unchanged.'**
+  String get premiumActiveTestMode;
+
+  /// No description provided for @premiumStoreLoading.
+  ///
+  /// In en, this message translates to:
+  /// **'Connecting to the store…'**
+  String get premiumStoreLoading;
+
+  /// No description provided for @premiumPurchasePending.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for the store to complete your purchase…'**
+  String get premiumPurchasePending;
+
+  /// No description provided for @premiumRestoring.
+  ///
+  /// In en, this message translates to:
+  /// **'Restoring your previous purchase…'**
+  String get premiumRestoring;
+
+  /// No description provided for @premiumStoreUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Premium is currently unavailable. Install a Play-distributed test build and check the product setup.'**
+  String get premiumStoreUnavailable;
+
+  /// No description provided for @premiumPurchaseError.
+  ///
+  /// In en, this message translates to:
+  /// **'The store could not complete this request. Please try again.'**
+  String get premiumPurchaseError;
+
+  /// No description provided for @buyPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Premium'**
+  String get buyPremium;
+
+  /// No description provided for @buyPremiumFor.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy Premium · {price}'**
+  String buyPremiumFor(Object price);
+
+  /// No description provided for @restorePurchases.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore purchase'**
+  String get restorePurchases;
 
   /// No description provided for @backupControl.
   ///
@@ -1357,6 +1447,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Could not check for updates. Please try again later.'**
   String get updateCheckFailed;
+
+  /// No description provided for @adPrivacyChoices.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad privacy choices'**
+  String get adPrivacyChoices;
+
+  /// No description provided for @adPrivacyChoicesDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Review or change the consent choices used for personalized advertising.'**
+  String get adPrivacyChoicesDescription;
+
+  /// No description provided for @privacyOptionsUnavailable.
+  ///
+  /// In en, this message translates to:
+  /// **'Ad privacy choices are not required or are temporarily unavailable.'**
+  String get privacyOptionsUnavailable;
 }
 
 class _AppLocalizationsDelegate

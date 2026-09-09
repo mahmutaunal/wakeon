@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 
 import '../../../core/play/play_providers.dart';
 import '../../../core/play/play_update_service.dart';
+import '../../../core/premium/premium_controller.dart';
 import '../../../core/settings/app_settings.dart';
+import '../../../core/ads/ad_coordinator.dart';
 
 import 'device_form_screen.dart';
 import 'devices_controller.dart';
@@ -22,6 +24,7 @@ class SettingsScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final l10n = AppLocalizations.of(context)!;
     final settings = ref.watch(appSettingsProvider);
+    final premium = ref.watch(premiumControllerProvider);
     final appVersion = ref.watch(appVersionProvider).valueOrNull ?? '—';
 
     return Scaffold(
@@ -31,6 +34,14 @@ class SettingsScreen extends ConsumerWidget {
           padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
           children: [
             _AppHeaderCard(appVersion: appVersion, studioName: _studioName),
+            const SizedBox(height: 24),
+            _SectionTitle(title: l10n.premium),
+            const SizedBox(height: 8),
+            _PremiumCard(
+              controller: premium,
+              onPurchase: () => premium.purchase(),
+              onRestore: () => premium.restore(),
+            ),
             const SizedBox(height: 24),
             _SectionTitle(title: l10n.general),
             const SizedBox(height: 8),
@@ -104,6 +115,15 @@ class SettingsScreen extends ConsumerWidget {
             const SizedBox(height: 8),
             const _PrivacyHighlightsCard(),
             const SizedBox(height: 12),
+            if (ref.watch(adCoordinatorProvider).privacyOptionsRequired) ...[
+              _SettingsTile(
+                icon: Icons.privacy_tip_outlined,
+                title: l10n.adPrivacyChoices,
+                subtitle: l10n.adPrivacyChoicesDescription,
+                onTap: () => _showAdPrivacyChoices(context, ref),
+              ),
+              const SizedBox(height: 12),
+            ],
             const _InfoCard(),
             const SizedBox(height: 24),
             _SectionTitle(title: l10n.aboutWakeon),
@@ -234,6 +254,19 @@ class SettingsScreen extends ConsumerWidget {
     );
   }
 
+  Future<void> _showAdPrivacyChoices(
+    BuildContext context,
+    WidgetRef ref,
+  ) async {
+    final shown = await ref.read(adCoordinatorProvider).showPrivacyOptions();
+    if (!context.mounted || shown) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(AppLocalizations.of(context)!.privacyOptionsUnavailable),
+      ),
+    );
+  }
+
   Future<void> _checkForUpdates(BuildContext context, WidgetRef ref) async {
     final l10n = AppLocalizations.of(context)!;
     final messenger = ScaffoldMessenger.of(context);
@@ -303,6 +336,11 @@ class SettingsScreen extends ConsumerWidget {
           ),
         ),
       );
+      if (importedCount > 0) {
+        await ref
+            .read(adCoordinatorProvider)
+            .recordCompletedAction(CompletedAdAction.backupImported);
+      }
     } catch (error) {
       if (!context.mounted) return;
 
@@ -539,6 +577,116 @@ class _SectionTitle extends StatelessWidget {
   }
 }
 
+class _PremiumCard extends StatelessWidget {
+  const _PremiumCard({
+    required this.controller,
+    required this.onPurchase,
+    required this.onRestore,
+  });
+
+  final PremiumController controller;
+  final Future<void> Function() onPurchase;
+  final Future<void> Function() onRestore;
+
+  @override
+  Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final theme = Theme.of(context);
+    final active = controller.isPremium;
+    final statusText = switch (controller.status) {
+      PremiumStoreStatus.loading => l10n.premiumStoreLoading,
+      PremiumStoreStatus.purchasing => l10n.premiumPurchasePending,
+      PremiumStoreStatus.restoring => l10n.premiumRestoring,
+      PremiumStoreStatus.unavailable => l10n.premiumStoreUnavailable,
+      PremiumStoreStatus.error => l10n.premiumPurchaseError,
+      PremiumStoreStatus.idle =>
+        active
+            ? (controller.isTestPremium
+                  ? l10n.premiumActiveTestMode
+                  : l10n.premiumActive)
+            : l10n.premiumDescription,
+    };
+
+    return Card(
+      color: active ? theme.colorScheme.primaryContainer : null,
+      child: Padding(
+        padding: const EdgeInsets.all(18),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                CircleAvatar(
+                  backgroundColor: active
+                      ? theme.colorScheme.primary
+                      : theme.colorScheme.tertiaryContainer,
+                  foregroundColor: active
+                      ? theme.colorScheme.onPrimary
+                      : theme.colorScheme.onTertiaryContainer,
+                  child: Icon(
+                    active ? Icons.verified_rounded : Icons.block_rounded,
+                  ),
+                ),
+                const SizedBox(width: 14),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        l10n.premiumRemoveAds,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.w900,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        statusText,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: active
+                              ? theme.colorScheme.onPrimaryContainer
+                              : theme.colorScheme.onSurfaceVariant,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+            if (!active) ...[
+              const SizedBox(height: 16),
+              SizedBox(
+                width: double.infinity,
+                child: FilledButton.icon(
+                  onPressed: controller.canPurchase ? onPurchase : null,
+                  icon: controller.isBusy
+                      ? const SizedBox.square(
+                          dimension: 18,
+                          child: CircularProgressIndicator(strokeWidth: 2),
+                        )
+                      : const Icon(Icons.workspace_premium_rounded),
+                  label: Text(
+                    controller.localizedPrice == null
+                        ? l10n.buyPremium
+                        : l10n.buyPremiumFor(controller.localizedPrice!),
+                  ),
+                ),
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: TextButton(
+                  onPressed: controller.isBusy ? null : onRestore,
+                  child: Text(l10n.restorePurchases),
+                ),
+              ),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+}
+
 /// Reusable settings row with an icon, text content, and navigation action.
 class _SettingsTile extends StatelessWidget {
   final IconData icon;
@@ -683,8 +831,8 @@ class _InfoCard extends StatelessWidget {
           children: [
             _InfoRow(
               icon: Icons.block_rounded,
-              title: l10n.noAds,
-              subtitle: l10n.noAdsDescription,
+              title: l10n.respectfulAds,
+              subtitle: l10n.respectfulAdsDescription,
             ),
             const SizedBox(height: 14),
             _InfoRow(

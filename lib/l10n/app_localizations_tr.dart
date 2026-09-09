@@ -207,7 +207,8 @@ class AppLocalizationsTr extends AppLocalizations {
   String get noAds => 'Reklam yok';
 
   @override
-  String get noAdsDescription => 'Wakeon reklam içermez.';
+  String get noAdsDescription =>
+      'Premium, banner ve geçiş reklamlarını kaldırır.';
 
   @override
   String get noAccount => 'Hesap yok';
@@ -427,7 +428,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get privacySummaryDescription =>
-      'Wakeon cihaz yapılandırmalarınızı cihazınızda tutar; hesap, reklam, analiz ve takip sistemleri kullanmaz.';
+      'Wakeon cihaz yapılandırmalarınızı cihazınızda tutar. Reklamlar ve toplu analizler bu yapılandırmayı hiçbir zaman içermez.';
 
   @override
   String get savedLocally => 'Yerel olarak saklanır';
@@ -441,7 +442,61 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get noTrackingDescription =>
-      'Wakeon analiz veya reklam SDK\'ları içermez.';
+      'Cihaz adları, MAC ve yerel adresler, yedekler ve paylaşım kodları reklamlara veya analize gönderilmez.';
+
+  @override
+  String get respectfulAds => 'İsteğe bağlı reklamsız yükseltme';
+
+  @override
+  String get respectfulAdsDescription =>
+      'Ücretsiz sürüm reklamlarla desteklenir; tek seferlik ömür boyu Premium satın alımı reklamları kaldırır.';
+
+  @override
+  String get premium => 'Premium';
+
+  @override
+  String get premiumRemoveAds => 'Reklamları ömür boyu kaldır';
+
+  @override
+  String get premiumDescription =>
+      'Tek satın alımla banner ve geçiş reklamları kaldırılır. Diğer tüm özellikler ücretsiz kalır.';
+
+  @override
+  String get premiumActive =>
+      'Premium etkin. Wakeon\'u desteklediğiniz için teşekkürler!';
+
+  @override
+  String get premiumActiveTestMode =>
+      'Premium test modu etkin. Mağaza satın alımları değişmedi.';
+
+  @override
+  String get premiumStoreLoading => 'Mağazaya bağlanılıyor…';
+
+  @override
+  String get premiumPurchasePending =>
+      'Satın alımın mağazada tamamlanması bekleniyor…';
+
+  @override
+  String get premiumRestoring => 'Önceki satın alımınız geri yükleniyor…';
+
+  @override
+  String get premiumStoreUnavailable =>
+      'Premium şu anda kullanılamıyor. Play üzerinden dağıtılan test sürümünü ve ürün ayarlarını kontrol edin.';
+
+  @override
+  String get premiumPurchaseError =>
+      'Mağaza bu isteği tamamlayamadı. Lütfen yeniden deneyin.';
+
+  @override
+  String get buyPremium => 'Premium satın al';
+
+  @override
+  String buyPremiumFor(Object price) {
+    return 'Premium satın al · $price';
+  }
+
+  @override
+  String get restorePurchases => 'Satın alımı geri yükle';
 
   @override
   String get backupControl => 'Yedekler sizin kontrolünüzde';
@@ -719,4 +774,15 @@ class AppLocalizationsTr extends AppLocalizations {
   @override
   String get updateCheckFailed =>
       'Güncellemeler kontrol edilemedi. Lütfen daha sonra tekrar dene.';
+
+  @override
+  String get adPrivacyChoices => 'Reklam gizlilik tercihleri';
+
+  @override
+  String get adPrivacyChoicesDescription =>
+      'Kişiselleştirilmiş reklamlarda kullanılan izin tercihlerini incele veya değiştir.';
+
+  @override
+  String get privacyOptionsUnavailable =>
+      'Reklam gizlilik tercihleri gerekli değil veya geçici olarak kullanılamıyor.';
 }
