@@ -38,9 +38,7 @@ class PremiumController extends ChangeNotifier {
        _forcePremiumForTesting = forcePremiumForTesting,
        _isPremium =
            forcePremiumForTesting ||
-           (preferences.getBool(_premiumEntitlementKey) ?? false);
-
-  static const _premiumEntitlementKey = 'premium.remove_ads.entitled';
+           (preferences.getBool(PremiumConfig.entitlementKey) ?? false);
 
   final SharedPreferences _preferences;
   final PurchaseGateway _gateway;
@@ -99,10 +97,7 @@ class PremiumController extends ChangeNotifier {
       }
       _setStatus(PremiumStoreStatus.idle);
       final ownedPurchases = await _gateway.queryOwnedPurchases();
-      if (ownedPurchases == null) {
-        // Non-consumables must be restored for reinstalls and device changes.
-        await _gateway.restorePurchases();
-      } else {
+      if (ownedPurchases != null) {
         await _reconcileOwnedPurchases(ownedPurchases);
       }
     } catch (_) {
@@ -175,7 +170,7 @@ class PremiumController extends ChangeNotifier {
       // A successful Play ownership query is authoritative, including after a
       // refund/revocation. Keep the cache only when the store cannot be reached.
       _isPremium = false;
-      await _preferences.setBool(_premiumEntitlementKey, false);
+      await _preferences.setBool(PremiumConfig.entitlementKey, false);
       notifyListeners();
       return;
     }
@@ -184,7 +179,7 @@ class PremiumController extends ChangeNotifier {
 
   Future<void> _grantPremium() async {
     _isPremium = true;
-    await _preferences.setBool(_premiumEntitlementKey, true);
+    await _preferences.setBool(PremiumConfig.entitlementKey, true);
     _setStatus(PremiumStoreStatus.idle);
   }
 

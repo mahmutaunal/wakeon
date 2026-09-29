@@ -438,11 +438,11 @@ class AppLocalizationsTr extends AppLocalizations {
       'Cihaz profilleri yalnızca bu cihazda saklanır.';
 
   @override
-  String get noTracking => 'Takip yok';
+  String get noTracking => 'Hassas veriler gizli kalır';
 
   @override
   String get noTrackingDescription =>
-      'Cihaz adları, MAC ve yerel adresler, yedekler ve paylaşım kodları reklamlara veya analize gönderilmez.';
+      'Cihaz adları, MAC ve yerel adresler, yedekler ve paylaşım kodları reklamlar veya analiz için kullanılmaz.';
 
   @override
   String get respectfulAds => 'İsteğe bağlı reklamsız yükseltme';
@@ -481,7 +481,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get premiumStoreUnavailable =>
-      'Premium şu anda kullanılamıyor. Play üzerinden dağıtılan test sürümünü ve ürün ayarlarını kontrol edin.';
+      'Premium şu anda kullanılamıyor. Mağaza üzerinden dağıtılan test sürümünü ve ürün ayarlarını kontrol edin.';
 
   @override
   String get premiumPurchaseError =>
@@ -528,7 +528,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get privacyPolicyDescription =>
-      'Wakeon kişisel veri toplamaz ve cihaz profillerini yerel olarak saklar.';
+      'Wakeon\'un cihaz profillerini nasıl yerel tuttuğunu ve reklamlarla analizlerin verileri nasıl işlediğini öğrenin.';
 
   @override
   String get openSourceLicenses => 'Açık kaynak lisansları';
@@ -745,7 +745,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get rateWakeonDescription =>
-      'Wakeon’dan ayrılmadan Play Store veya App Store değerlendirme ekranını aç.';
+      'Wakeon’dan ayrılmadan yerel değerlendirme ekranını aç.';
 
   @override
   String get reviewUnavailable =>
@@ -756,7 +756,7 @@ class AppLocalizationsTr extends AppLocalizations {
 
   @override
   String get checkForUpdatesDescription =>
-      'Play Store veya App Store’da yeni bir Wakeon sürümü olup olmadığını kontrol et.';
+      'Cihazının uygulama mağazasında yeni bir Wakeon sürümü olup olmadığını kontrol et.';
 
   @override
   String get appIsUpToDate => 'Wakeon güncel.';

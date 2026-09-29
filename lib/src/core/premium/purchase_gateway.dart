@@ -10,8 +10,8 @@ abstract interface class PurchaseGateway {
 
   Future<ProductDetailsResponse> queryProductDetails(Set<String> identifiers);
 
-  /// Returns current Play ownership, or null when this platform cannot provide
-  /// an authoritative snapshot through the billing client.
+  /// Returns current Android ownership, or null on iOS. Apple restoration is
+  /// deliberately user initiated so StoreKit never interrupts app launch.
   Future<List<PurchaseDetails>?> queryOwnedPurchases();
 
   Future<bool> buyNonConsumable(ProductDetails product);

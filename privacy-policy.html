@@ -12,7 +12,7 @@
 </head>
 <body>
   <h1>Privacy Policy</h1>
-  <p><strong>Effective date:</strong> 2026-08-28</p>
+  <p><strong>Effective date:</strong> 2026-09-12</p>
   <p>Wakeon is an open-source Wake-on-LAN application developed by AlpWare Studio.</p>
   <h2>Information stored on your device</h2>
   <p>Wakeon stores device profiles (such as the name, MAC address, local host and broadcast addresses, port, device type, favorite status, and last wake time) locally on your device. Local network scan results also remain on your device. Wakeon does not send this device-profile or network-scan data to AlpWare Studio, Google Mobile Ads, or Firebase Analytics.</p>
@@ -20,9 +20,11 @@
   <h2>Advertising and consent</h2>
   <p>Wakeon uses Google Mobile Ads (AdMob) to display banner and interstitial ads. Depending on your region and choices, Google and its advertising partners may process advertising identifiers, IP address, device and app information, approximate location derived from signals such as IP address, ad interactions, and diagnostic data to provide, limit, measure, personalize, and protect ads.</p>
   <p>Wakeon uses Google's User Messaging Platform (UMP) to request and record consent where required. When UMP requires an ongoing privacy-options entry point, you can review or change your choice under <strong>Settings &gt; Ad privacy choices</strong>. You can also reset the app's data or use your operating system's advertising/privacy controls.</p>
+  <p>On iOS, Wakeon requests permission through Apple's App Tracking Transparency (ATT) framework before initializing Mobile Ads or requesting an ad. If you deny permission, Wakeon does not access the advertising identifier; you can continue using every free feature and may still receive contextual or limited ads. ATT and regional consent are separate choices and neither is required to use Wakeon.</p>
   <p>See <a href="https://policies.google.com/technologies/partner-sites">How Google uses information from sites or apps that use its services</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
   <h2>Analytics and Remote Config</h2>
   <p>Wakeon uses Google Analytics for Firebase to measure aggregate app and advertising performance and Firebase Remote Config to safely adjust ad frequency or disable ad formats. Analytics may process app instance identifiers, device and app information, country/region, acquisition source, usage events, ad format, ad placement, ad load or display result, and diagnostics. Wakeon does not include device names, MAC addresses, local IP addresses, broadcast addresses, backup contents, or share codes in analytics events.</p>
+  <p>Analytics collection is disabled while the applicable consent checks are pending. On iOS it remains disabled when ATT permission is denied or restricted.</p>
   <p>Analytics retention and deletion are managed using the Firebase/Google Analytics controls configured by AlpWare Studio and Google's applicable policies.</p>
   <h2>Network access</h2>
   <p>Wakeon uses network access to scan your local network, send Wake-on-LAN packets, check device status, and access the third-party services described above. Local network information is used for the requested Wake-on-LAN feature and is not added to advertising or analytics events by Wakeon.</p>

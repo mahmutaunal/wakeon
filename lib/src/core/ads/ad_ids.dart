@@ -2,12 +2,25 @@ import 'dart:io';
 
 import 'package:flutter/foundation.dart';
 
-/// Ad unit IDs are injected at build time. Release builds remain ad-free until
-/// real IDs are supplied, preventing accidental use of Google's test inventory.
+/// Platform-isolated AdMob unit IDs.
+///
+/// iOS production units are intentionally kept separate from Android build
+/// defines. Android release builds remain ad-free until their own IDs are
+/// supplied, preventing either storefront from serving the other's inventory.
 abstract final class AdIds {
-  static const _configuredBanner = String.fromEnvironment('ADMOB_BANNER_ID');
-  static const _configuredInterstitial = String.fromEnvironment(
-    'ADMOB_INTERSTITIAL_ID',
+  static const _androidBanner = String.fromEnvironment(
+    'ADMOB_ANDROID_BANNER_ID',
+  );
+  static const _androidInterstitial = String.fromEnvironment(
+    'ADMOB_ANDROID_INTERSTITIAL_ID',
+  );
+  static const _iosBanner = String.fromEnvironment(
+    'ADMOB_IOS_BANNER_ID',
+    defaultValue: 'ca-app-pub-5963947262278027/1630132627',
+  );
+  static const _iosInterstitial = String.fromEnvironment(
+    'ADMOB_IOS_INTERSTITIAL_ID',
+    defaultValue: 'ca-app-pub-5963947262278027/2615911230',
   );
 
   static const _androidTestBanner = 'ca-app-pub-3940256099942544/6300978111';
@@ -20,14 +33,24 @@ abstract final class AdIds {
       !kIsWeb && (Platform.isAndroid || Platform.isIOS);
 
   static String? get banner {
-    if (_configuredBanner.isNotEmpty) return _configuredBanner;
-    if (kReleaseMode || !supported) return null;
-    return Platform.isAndroid ? _androidTestBanner : _iosTestBanner;
+    if (!supported) return null;
+    if (!kReleaseMode) {
+      return Platform.isAndroid ? _androidTestBanner : _iosTestBanner;
+    }
+    final configured = Platform.isAndroid ? _androidBanner : _iosBanner;
+    return configured.isEmpty ? null : configured;
   }
 
   static String? get interstitial {
-    if (_configuredInterstitial.isNotEmpty) return _configuredInterstitial;
-    if (kReleaseMode || !supported) return null;
-    return Platform.isAndroid ? _androidTestInterstitial : _iosTestInterstitial;
+    if (!supported) return null;
+    if (!kReleaseMode) {
+      return Platform.isAndroid
+          ? _androidTestInterstitial
+          : _iosTestInterstitial;
+    }
+    final configured = Platform.isAndroid
+        ? _androidInterstitial
+        : _iosInterstitial;
+    return configured.isEmpty ? null : configured;
   }
 }

@@ -436,11 +436,11 @@ class AppLocalizationsEn extends AppLocalizations {
       'Device profiles are stored only on this device.';
 
   @override
-  String get noTracking => 'No tracking';
+  String get noTracking => 'Sensitive data stays private';
 
   @override
   String get noTrackingDescription =>
-      'Device names, MAC addresses, local addresses, backups, and share codes are never sent to ads or analytics.';
+      'Device names, MAC addresses, local addresses, backups, and share codes are never used for ads or analytics.';
 
   @override
   String get respectfulAds => 'Optional ad-free upgrade';
@@ -479,7 +479,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumStoreUnavailable =>
-      'Premium is currently unavailable. Install a Play-distributed test build and check the product setup.';
+      'Premium is currently unavailable. Install a store-distributed test build and check the product setup.';
 
   @override
   String get premiumPurchaseError =>
@@ -526,7 +526,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get privacyPolicyDescription =>
-      'Wakeon does not collect personal data and keeps device profiles local.';
+      'Learn how Wakeon keeps device profiles local and how ads and analytics process data.';
 
   @override
   String get openSourceLicenses => 'Open-source licenses';
@@ -743,7 +743,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get rateWakeonDescription =>
-      'Open the native Play Store or App Store rating sheet without leaving Wakeon.';
+      'Open the native rating sheet without leaving Wakeon.';
 
   @override
   String get reviewUnavailable =>
@@ -754,7 +754,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get checkForUpdatesDescription =>
-      'Check the Play Store or App Store for a newer Wakeon version.';
+      'Check your device\'s app store for a newer Wakeon version.';
 
   @override
   String get appIsUpToDate => 'Wakeon is up to date.';

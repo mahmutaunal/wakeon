@@ -1,6 +1,6 @@
 # Privacy Policy
 
-Effective date: 2026-08-28
+Effective date: 2026-09-12
 
 Wakeon is an open-source Wake-on-LAN application developed by AlpWare Studio.
 
@@ -29,6 +29,12 @@ where required. When UMP requires an ongoing privacy-options entry point, you ca
 review or change your choice under **Settings > Ad privacy choices**. You can also
 reset the app's data or use your operating system's advertising/privacy controls.
 
+On iOS, Wakeon requests permission through Apple's App Tracking Transparency
+(ATT) framework before initializing Mobile Ads or requesting an ad. If you deny
+permission, Wakeon does not access the advertising identifier; you can continue
+using every free feature and may still receive contextual or limited ads. ATT and
+regional consent are separate choices and neither is required to use Wakeon.
+
 Google's processing is described in [How Google uses information from sites or
 apps that use its services](https://policies.google.com/technologies/partner-sites)
 and the [Google Privacy Policy](https://policies.google.com/privacy).
@@ -42,6 +48,9 @@ country/region, acquisition source, usage events, ad format, ad placement, ad lo
 or display result, and diagnostics. Wakeon does not include device names, MAC
 addresses, local IP addresses, broadcast addresses, backup contents, or share codes
 in analytics events.
+
+Analytics collection is disabled while the applicable consent checks are pending.
+On iOS it remains disabled when ATT permission is denied or restricted.
 
 Analytics retention and deletion are managed using the Firebase/Google Analytics
 controls configured by AlpWare Studio and Google's applicable policies.

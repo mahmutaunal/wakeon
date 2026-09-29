@@ -14,6 +14,14 @@ class AdAnalytics {
     }
   }
 
+  Future<void> setCollectionEnabled(bool enabled) async {
+    try {
+      await _analytics?.setAnalyticsCollectionEnabled(enabled);
+    } catch (_) {
+      // Firebase is optional; privacy and ad behavior must remain independent.
+    }
+  }
+
   Future<void> event(
     String name, {
     required String format,

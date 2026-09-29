@@ -3,7 +3,7 @@ import Network
 import SwiftUI
 import WidgetKit
 
-private let appGroupId = "group.com.alpwarestudio.wakeon"
+private let appGroupId = "group.com.alpwarestudio.wakeon.shared"
 
 struct WidgetDevice: Identifiable, Codable, Hashable {
     let id: String

@@ -46,6 +46,7 @@ dependencies:
   in_app_review: ^2.0.12
   in_app_update: ^5.0.0
   package_info_plus: ^9.0.1
+  app_tracking_transparency: ^2.0.7
 
   flutter_localizations:
     sdk: flutter

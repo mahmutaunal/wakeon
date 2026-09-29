@@ -1,0 +1,4 @@
+"NSUserTrackingUsageDescription" = "İzniniz, Wakeon'un ücretsiz sürümünü daha alakalı reklamlarla desteklemesine yardımcı olur. Cihaz profilleri ve yerel ağ verileri reklam amacıyla hiçbir zaman kullanılmaz.";
+"NSLocationWhenInUseUsageDescription" = "Wakeon, mevcut Wi-Fi ağını belirlemek ve uyandırabileceğiniz cihazları bulmak için yalnızca uygulama açıkken konumunuzu kullanır.";
+"NSCameraUsageDescription" = "Wakeon, cihaz veya yedek verilerini içe aktarırken kamerayla bir dosya oluşturmayı seçerseniz kamerayı kullanabilir.";
+"NSPhotoLibraryUsageDescription" = "Wakeon, cihaz veya yedek verilerini içe aktarırken fotoğraf arşivinizden bir dosya seçerseniz arşive erişebilir.";

@@ -1,5 +1,7 @@
 import 'dart:async';
+import 'dart:io';
 
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -57,6 +59,7 @@ class AdCoordinator extends ChangeNotifier with WidgetsBindingObserver {
   bool _privacyOptionsRequired = false;
   bool _interstitialLoading = false;
   bool _interstitialShowing = false;
+  TrackingStatus? _iosTrackingStatus;
   int _completedActions = 0;
   int _actionsSinceLastInterstitial = 0;
   bool _hasShownInterstitialThisSession = false;
@@ -81,6 +84,8 @@ class AdCoordinator extends ChangeNotifier with WidgetsBindingObserver {
     await _analytics.initialize();
     await _loadRemoteConfig();
     await _refreshConsent();
+    await _requestIosTrackingAuthorization();
+    await _applyAnalyticsCollection();
     _initialized = true;
     _initializing = false;
 
@@ -132,6 +137,44 @@ class AdCoordinator extends ChangeNotifier with WidgetsBindingObserver {
     );
   }
 
+  /// Requests ATT only for the ad-supported iOS experience and always before
+  /// Mobile Ads is initialized or an ad request can be created.
+  ///
+  /// If an AdMob UMP IDFA explainer is configured, UMP may already have caused
+  /// the system prompt to be shown. Re-reading the status prevents a duplicate
+  /// request in that case. Denial never blocks the app or contextual ads.
+  Future<void> _requestIosTrackingAuthorization() async {
+    if (!Platform.isIOS || !_config.adsEnabled || !_canRequestAds) return;
+    try {
+      var status = await AppTrackingTransparency.trackingAuthorizationStatus;
+      if (status == TrackingStatus.notDetermined) {
+        // ATT can only present while the first Flutter scene is active and no
+        // other permission sheet (including UMP) is being dismissed.
+        await WidgetsBinding.instance.endOfFrame;
+        await Future<void>.delayed(const Duration(milliseconds: 350));
+        status = await AppTrackingTransparency.requestTrackingAuthorization();
+      }
+      _iosTrackingStatus = status;
+    } catch (_) {
+      // A restricted device or unavailable framework must still be able to use
+      // the app and receive non-personalized/contextual ad requests.
+    }
+  }
+
+  Future<void> _applyAnalyticsCollection() async {
+    final trackingAllowed =
+        !Platform.isIOS || _iosTrackingStatus == TrackingStatus.authorized;
+    await _analytics.setCollectionEnabled(_canRequestAds && trackingAllowed);
+    if (_iosTrackingStatus case final status?) {
+      await _analytics.event(
+        'att_authorization_resolved',
+        format: 'privacy',
+        placement: 'app_launch',
+        reason: status.name,
+      );
+    }
+  }
+
   Future<bool> showPrivacyOptions() async {
     if (!_privacyOptionsRequired) return false;
     final completer = Completer<bool>();
@@ -144,6 +187,7 @@ class AdCoordinator extends ChangeNotifier with WidgetsBindingObserver {
         await ConsentInformation.instance
             .getPrivacyOptionsRequirementStatus() ==
         PrivacyOptionsRequirementStatus.required;
+    await _applyAnalyticsCollection();
     // Recreate loaded inventory so the next request immediately carries the
     // user's latest UMP/consent-mode signals.
     _bannerAd?.dispose();

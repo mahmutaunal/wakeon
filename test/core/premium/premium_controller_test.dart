@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -60,7 +61,7 @@ class _FakePurchaseGateway implements PurchaseGateway {
 void main() {
   TestWidgetsFlutterBinding.ensureInitialized();
 
-  test('loads the product and requests restoration on startup', () async {
+  test('loads the product without an automatic restoration prompt', () async {
     SharedPreferences.setMockInitialValues({});
     final preferences = await SharedPreferences.getInstance();
     final gateway = _FakePurchaseGateway();
@@ -73,9 +74,39 @@ void main() {
 
     expect(controller.localizedPrice, '₺99,99');
     expect(controller.canPurchase, isTrue);
-    expect(gateway.restoreCalled, isTrue);
+    expect(gateway.restoreCalled, isFalse);
     controller.dispose();
     await gateway.updates.close();
+  });
+
+  test('restores only after an explicit user action', () async {
+    SharedPreferences.setMockInitialValues({});
+    final preferences = await SharedPreferences.getInstance();
+    final gateway = _FakePurchaseGateway();
+    final controller = PremiumController(
+      preferences: preferences,
+      gateway: gateway,
+    );
+    await controller.initialize();
+
+    await controller.restore();
+
+    expect(gateway.restoreCalled, isTrue);
+    expect(controller.status, PremiumStoreStatus.idle);
+    controller.dispose();
+    await gateway.updates.close();
+  });
+
+  test('uses independent product identifiers for Android and iOS', () {
+    expect(
+      PremiumConfig.productIdFor(TargetPlatform.android),
+      PremiumConfig.androidProductId,
+    );
+    expect(
+      PremiumConfig.productIdFor(TargetPlatform.iOS),
+      PremiumConfig.iosProductId,
+    );
+    expect(PremiumConfig.androidProductId, isNot(PremiumConfig.iosProductId));
   });
 
   test('successful store update grants and persists Premium', () async {
@@ -104,7 +135,7 @@ void main() {
 
     expect(controller.isPremium, isTrue);
     expect(gateway.completeCalled, isTrue);
-    expect(preferences.getBool('premium.remove_ads.entitled'), isTrue);
+    expect(preferences.getBool(PremiumConfig.entitlementKey), isTrue);
     controller.dispose();
     await gateway.updates.close();
   });
@@ -133,7 +164,7 @@ void main() {
     'authoritative Play ownership snapshot clears a revoked cache',
     () async {
       SharedPreferences.setMockInitialValues({
-        'premium.remove_ads.entitled': true,
+        PremiumConfig.entitlementKey: true,
       });
       final preferences = await SharedPreferences.getInstance();
       final gateway = _FakePurchaseGateway()..ownedPurchases = [];
@@ -145,7 +176,7 @@ void main() {
       await controller.initialize();
 
       expect(controller.isPremium, isFalse);
-      expect(preferences.getBool('premium.remove_ads.entitled'), isFalse);
+      expect(preferences.getBool(PremiumConfig.entitlementKey), isFalse);
       expect(gateway.restoreCalled, isFalse);
       controller.dispose();
       await gateway.updates.close();

@@ -4,7 +4,7 @@ import WidgetKit
 
 final class WidgetChannelRegistrar {
   private static let channelName = "com.alpwarestudio.wakeon/widget"
-  private static let appGroupId = "group.com.alpwarestudio.wakeon"
+  private static let appGroupId = "group.com.alpwarestudio.wakeon.shared"
   private static var didRegister = false
 
   static func register(binaryMessenger: FlutterBinaryMessenger) {

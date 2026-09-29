@@ -1,7 +1,29 @@
+import 'package:flutter/foundation.dart';
+
 /// Store and development configuration for Wakeon Premium.
 abstract final class PremiumConfig {
-  /// Must exactly match the one-time product ID in Play Console/App Store.
-  static const productId = 'wakeon_premium';
+  /// These IDs belong to independent products in their respective stores.
+  /// Keep the Android default stable because it is already used by Play.
+  static const androidProductId = String.fromEnvironment(
+    'ANDROID_PREMIUM_PRODUCT_ID',
+    defaultValue: 'wakeon_premium',
+  );
+  static const iosProductId = String.fromEnvironment(
+    'IOS_PREMIUM_PRODUCT_ID',
+    defaultValue: 'wakeon_premium_ios',
+  );
+
+  static String get productId => productIdFor(defaultTargetPlatform);
+
+  static String productIdFor(TargetPlatform platform) => switch (platform) {
+    TargetPlatform.iOS => iosProductId,
+    _ => androidProductId,
+  };
+
+  static String get entitlementKey =>
+      defaultTargetPlatform == TargetPlatform.iOS
+      ? 'premium.remove_ads.entitled.ios'
+      : 'premium.remove_ads.entitled';
 
   /// Development-only entitlement override.
   ///

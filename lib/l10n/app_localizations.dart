@@ -857,13 +857,13 @@ abstract class AppLocalizations {
   /// No description provided for @noTracking.
   ///
   /// In en, this message translates to:
-  /// **'No tracking'**
+  /// **'Sensitive data stays private'**
   String get noTracking;
 
   /// No description provided for @noTrackingDescription.
   ///
   /// In en, this message translates to:
-  /// **'Device names, MAC addresses, local addresses, backups, and share codes are never sent to ads or analytics.'**
+  /// **'Device names, MAC addresses, local addresses, backups, and share codes are never used for ads or analytics.'**
   String get noTrackingDescription;
 
   /// No description provided for @respectfulAds.
@@ -929,7 +929,7 @@ abstract class AppLocalizations {
   /// No description provided for @premiumStoreUnavailable.
   ///
   /// In en, this message translates to:
-  /// **'Premium is currently unavailable. Install a Play-distributed test build and check the product setup.'**
+  /// **'Premium is currently unavailable. Install a store-distributed test build and check the product setup.'**
   String get premiumStoreUnavailable;
 
   /// No description provided for @premiumPurchaseError.
@@ -1007,7 +1007,7 @@ abstract class AppLocalizations {
   /// No description provided for @privacyPolicyDescription.
   ///
   /// In en, this message translates to:
-  /// **'Wakeon does not collect personal data and keeps device profiles local.'**
+  /// **'Learn how Wakeon keeps device profiles local and how ads and analytics process data.'**
   String get privacyPolicyDescription;
 
   /// No description provided for @openSourceLicenses.
@@ -1397,7 +1397,7 @@ abstract class AppLocalizations {
   /// No description provided for @rateWakeonDescription.
   ///
   /// In en, this message translates to:
-  /// **'Open the native Play Store or App Store rating sheet without leaving Wakeon.'**
+  /// **'Open the native rating sheet without leaving Wakeon.'**
   String get rateWakeonDescription;
 
   /// No description provided for @reviewUnavailable.
@@ -1415,7 +1415,7 @@ abstract class AppLocalizations {
   /// No description provided for @checkForUpdatesDescription.
   ///
   /// In en, this message translates to:
-  /// **'Check the Play Store or App Store for a newer Wakeon version.'**
+  /// **'Check your device\'s app store for a newer Wakeon version.'**
   String get checkForUpdatesDescription;
 
   /// No description provided for @appIsUpToDate.

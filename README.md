@@ -223,6 +223,26 @@ flutter run --dart-define=WAKEON_FORCE_PREMIUM=true
 
 Release builds always ignore this override.
 
+## Platform-specific store configuration
+
+Android and iOS monetization identifiers are intentionally isolated. The
+Android Premium product remains `wakeon_premium`; the iOS non-consumable is
+`wakeon_premium_ios`. They can be overridden independently with
+`ANDROID_PREMIUM_PRODUCT_ID` and `IOS_PREMIUM_PRODUCT_ID` build defines.
+
+iOS release builds contain their own AdMob app, banner, and interstitial IDs.
+Android release ad units must be supplied separately:
+
+```bash
+flutter build appbundle \
+  --dart-define=ADMOB_ANDROID_BANNER_ID=ca-app-pub-.../... \
+  --dart-define=ADMOB_ANDROID_INTERSTITIAL_ID=ca-app-pub-.../...
+```
+
+Debug and profile builds always use Google's platform-specific test ad units.
+See [the iOS release checklist](docs/ios-release-checklist.md) before uploading
+the first Apple build.
+
 ## Open Source
 
 Wakeon is open-source and community-friendly.

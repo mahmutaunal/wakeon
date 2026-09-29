@@ -1,0 +1,4 @@
+"NSUserTrackingUsageDescription" = "Your permission helps Wakeon support its free version with more relevant ads. Device profiles and local network data are never used for advertising.";
+"NSLocationWhenInUseUsageDescription" = "Wakeon uses your location while the app is open to identify the current Wi-Fi network and discover devices you can wake.";
+"NSCameraUsageDescription" = "Wakeon may use the camera when you choose to capture a file for importing device or backup data.";
+"NSPhotoLibraryUsageDescription" = "Wakeon may access your photo library when you choose a file from it for importing device or backup data.";
